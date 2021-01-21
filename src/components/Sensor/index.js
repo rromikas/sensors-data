@@ -11,10 +11,15 @@ const Sensor = () => {
   const [rotationRate, setRotationRate] = useState({ alpha: 0, beta: 0, gamma: 0 });
   useEffect(() => {
     const onDeviceMotion = (e) => {
-      console.log(" device motion e", e);
-      setAcceleration((prev) => Object.assign({}, prev, e.acceleration));
+      setAcceleration((prev) =>
+        Object.assign({}, prev, { x: e.acceleration.x, y: e.acceleration.y, z: e.acceleration.z })
+      );
       setAccelerationIncludingGravity((prev) =>
-        Object.assign({}, prev, e.accelerationIncludingGravity)
+        Object.assign({}, prev, {
+          x: e.accelerationIncludingGravity.x,
+          y: e.accelerationIncludingGravity.y,
+          z: e.accelerationIncludingGravity.z,
+        })
       );
       setRotationRate((prev) =>
         Object.assign({}, prev, {
@@ -29,7 +34,6 @@ const Sensor = () => {
       setOrientation((prev) =>
         Object.assign({}, prev, { alpha: e.alpha || 0, beta: e.beta || 0, gamma: e.gamma || 0 })
       );
-      console.log(" device orientation e", e);
     };
 
     window.addEventListener("devicemotion", onDeviceMotion, true);
@@ -56,7 +60,6 @@ const Sensor = () => {
       <div
         style={{
           background: "rgba(0,0,0,0)",
-          //   color: "white",
           padding: "20px",
           borderRadius: "8px",
           maxWidth: "300px",

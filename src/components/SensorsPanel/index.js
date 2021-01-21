@@ -14,7 +14,6 @@ const SensorsPanel = () => {
   const [rotationRate, setRotationRate] = useState({ alpha: 0, beta: 0, gamma: 0 });
   useEffect(() => {
     const onDeviceMotion = (e) => {
-      console.log("e.rotateion reat", e.rotationRate);
       setAcceleration((prev) =>
         Object.assign({}, prev, {
           x: e.acceleration.x || 0,
@@ -44,14 +43,16 @@ const SensorsPanel = () => {
       );
     };
 
-    window.addEventListener("devicemotion", onDeviceMotion, true);
-    window.addEventListener("deviceorientation", onDeviceOrientation, true);
+    if (showGraphs) {
+      window.addEventListener("devicemotion", onDeviceMotion, true);
+      window.addEventListener("deviceorientation", onDeviceOrientation, true);
+    }
 
     return () => {
       window.removeEventListener("devicemotion", onDeviceMotion);
       window.removeEventListener("deviceorientation", onDeviceOrientation);
     };
-  }, []);
+  }, [showGraphs]);
   return (
     <>
       <div

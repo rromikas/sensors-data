@@ -1,130 +1,48 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import RealTimeChart from "./Chart";
 
-const Sensor = () => {
-  const [orientation, setOrientation] = useState({ alpha: 0, beta: 0, gamma: 0 });
-  const [acceleration, setAcceleration] = useState({ x: 0, y: 0, z: 0 });
-  const [accelerationIncludingGravity, setAccelerationIncludingGravity] = useState({
-    x: 0,
-    y: 0,
-    z: 0,
-  });
-  const [rotationRate, setRotationRate] = useState({ alpha: 0, beta: 0, gamma: 0 });
-  useEffect(() => {
-    const onDeviceMotion = (e) => {
-      setAcceleration((prev) =>
-        Object.assign({}, prev, { x: e.acceleration.x, y: e.acceleration.y, z: e.acceleration.z })
-      );
-      setAccelerationIncludingGravity((prev) =>
-        Object.assign({}, prev, {
-          x: e.accelerationIncludingGravity.x,
-          y: e.accelerationIncludingGravity.y,
-          z: e.accelerationIncludingGravity.z,
-        })
-      );
-      setRotationRate((prev) =>
-        Object.assign({}, prev, {
-          alpha: e.rotationRate.alpha || 0,
-          beta: e.rotationRate.beta || 0,
-          gamma: e.rotationRate.gamma || 0,
-        })
-      );
-    };
-
-    const onDeviceOrientation = (e) => {
-      setOrientation((prev) =>
-        Object.assign({}, prev, { alpha: e.alpha || 0, beta: e.beta || 0, gamma: e.gamma || 0 })
-      );
-    };
-
-    window.addEventListener("devicemotion", onDeviceMotion, true);
-    window.addEventListener("deviceorientation", onDeviceOrientation, true);
-
-    return () => {
-      window.removeEventListener("devicemotion", onDeviceMotion);
-      window.removeEventListener("deviceorientation", onDeviceOrientation);
-    };
-  }, []);
+const Sensor = ({ value, subject, units }) => {
+  const { x, y, z } = value;
+  console.log("x,yz", z, y, z, subject);
   return (
     <div
       style={{
-        position: "fixed",
-        width: "100%",
-        left: 0,
-        top: 0,
+        boxSizing: "border-box",
+        background: "white",
         padding: "20px",
-        display: "flex",
-        justifyContent: "flex-start",
-        pointerEvents: "none",
+        borderRadius: "8px",
+        width: "100%",
       }}
     >
-      <div
-        style={{
-          background: "rgba(0,0,0,0.1)",
-          padding: "20px",
-          borderRadius: "8px",
-          maxWidth: "300px",
-          width: "100%",
-        }}
-      >
-        <div style={{ marginBottom: 10 }}>
-          <div className="title">Orientation</div>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <div>X-axis (β)</div>
-            <div>{orientation.beta.toFixed(1)}</div>
+      <div className="title" style={{ marginBottom: "10px" }}>
+        {subject}
+      </div>
+      <div style={{ display: "flex" }}>
+        <div style={{ width: "50px" }}>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <div>x:</div>
+            <div>
+              {x.toFixed(1)}
+              {units}
+            </div>
           </div>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <div>Y-axis (γ)</div>
-            <div>{orientation.gamma.toFixed(1)}</div>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <div>y:</div>
+            <div>
+              {y.toFixed(1)}
+              {units}
+            </div>
           </div>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <div>Z-axis (α)</div>
-            <div>{orientation.alpha.toFixed(1)}</div>
-          </div>
-        </div>
-        <div style={{ marginBottom: 10 }}>
-          <div className="title">Accelerometer</div>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <div>X-axis (β)</div>
-            <div>{acceleration.x.toFixed(1)}</div>
-          </div>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <div>Y-axis (γ)</div>
-            <div>{acceleration.y.toFixed(1)}</div>
-          </div>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <div>Z-axis (α)</div>
-            <div>{acceleration.z.toFixed(1)}</div>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <div>z:</div>
+            <div>
+              {z.toFixed(1)}
+              {units}
+            </div>
           </div>
         </div>
-        <div style={{ marginBottom: 10 }}>
-          <div className="title">Accelerometer including gravity</div>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <div>X-axis (β)</div>
-            <div>{accelerationIncludingGravity.x.toFixed(1)}</div>
-          </div>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <div>Y-axis (γ)</div>
-            <div>{accelerationIncludingGravity.y.toFixed(1)}</div>
-          </div>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <div>Z-axis (α)</div>
-            <div>{accelerationIncludingGravity.z.toFixed(1)}</div>
-          </div>
-        </div>
-        <div style={{ marginBottom: 10 }}>
-          <div className="title">Gyroscope</div>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <div>X-axis (β)</div>
-            <div>{rotationRate.beta.toFixed(1)}</div>
-          </div>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <div>Y-axis (γ)</div>
-            <div>{rotationRate.gamma.toFixed(1)}</div>
-          </div>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <div>Z-axis (α)</div>
-            <div>{rotationRate.alpha.toFixed(1)}</div>
-          </div>
+        <div style={{ flexGrow: 1, width: 0 }}>
+          <RealTimeChart value={value}></RealTimeChart>
         </div>
       </div>
     </div>

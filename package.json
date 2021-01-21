@@ -12,6 +12,7 @@
     "react-map-gl": "^6.0.3",
     "react-mapbox-gl": "^5.1.1",
     "react-scripts": "4.0.1",
+    "recharts": "^2.0.3",
     "web-vitals": "^0.2.4",
     "worker-loader": "^3.0.7"
   },

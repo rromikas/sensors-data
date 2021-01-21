@@ -23,7 +23,7 @@ const RealTimeChart = ({ value, range }) => {
     }, 1000);
 
     return () => clearTimeout(timeout);
-  }, [value]);
+  }, [data]);
 
   return (
     <ResponsiveContainer width={"100%"} height={140}>

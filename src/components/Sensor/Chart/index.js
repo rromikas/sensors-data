@@ -20,7 +20,7 @@ const RealTimeChart = ({ value, range }) => {
         }
         return [value, ...arr];
       });
-    }, 200);
+    }, 1);
 
     return () => clearTimeout(timeout);
   }, [data]);

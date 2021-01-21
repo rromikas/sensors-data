@@ -12,18 +12,14 @@ import React, { useEffect, useState } from "react";
 const RealTimeChart = ({ value, range }) => {
   const [data, setData] = useState([]);
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      setData((prev) => {
-        let arr = [...prev];
-        if (arr.length == 10) {
-          arr.splice(arr.length - 1, 1);
-        }
-        return [value, ...arr];
-      });
-    }, 1000);
-
-    return () => clearTimeout(timeout);
-  }, [data]);
+    setData((prev) => {
+      let arr = [...prev];
+      if (arr.length == 10) {
+        arr.splice(arr.length - 1, 1);
+      }
+      return [value, ...arr];
+    });
+  }, [value]);
 
   return (
     <ResponsiveContainer width={"100%"} height={140}>

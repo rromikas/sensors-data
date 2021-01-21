@@ -59,7 +59,7 @@ const Sensor = () => {
     >
       <div
         style={{
-          background: "rgba(0,0,0,0)",
+          background: "rgba(0,0,0,0.1)",
           padding: "20px",
           borderRadius: "8px",
           maxWidth: "300px",
@@ -70,60 +70,60 @@ const Sensor = () => {
           <div className="title">Orientation</div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div>X-axis (β)</div>
-            <div>{orientation.beta.toFixed(2)}</div>
+            <div>{orientation.beta.toFixed(1)}</div>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div>Y-axis (γ)</div>
-            <div>{orientation.gamma.toFixed(2)}</div>
+            <div>{orientation.gamma.toFixed(1)}</div>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div>Z-axis (α)</div>
-            <div>{orientation.alpha.toFixed(2)}</div>
+            <div>{orientation.alpha.toFixed(1)}</div>
           </div>
         </div>
         <div style={{ marginBottom: 10 }}>
           <div className="title">Accelerometer</div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div>X-axis (β)</div>
-            <div>{acceleration.x.toFixed(2)}</div>
+            <div>{acceleration.x.toFixed(1)}</div>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div>Y-axis (γ)</div>
-            <div>{acceleration.y.toFixed(2)}</div>
+            <div>{acceleration.y.toFixed(1)}</div>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div>Z-axis (α)</div>
-            <div>{acceleration.z.toFixed(2)}</div>
+            <div>{acceleration.z.toFixed(1)}</div>
           </div>
         </div>
         <div style={{ marginBottom: 10 }}>
           <div className="title">Accelerometer including gravity</div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div>X-axis (β)</div>
-            <div>{accelerationIncludingGravity.x.toFixed(2)}</div>
+            <div>{accelerationIncludingGravity.x.toFixed(1)}</div>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div>Y-axis (γ)</div>
-            <div>{accelerationIncludingGravity.y.toFixed(2)}</div>
+            <div>{accelerationIncludingGravity.y.toFixed(1)}</div>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div>Z-axis (α)</div>
-            <div>{accelerationIncludingGravity.z.toFixed(2)}</div>
+            <div>{accelerationIncludingGravity.z.toFixed(1)}</div>
           </div>
         </div>
         <div style={{ marginBottom: 10 }}>
           <div className="title">Gyroscope</div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div>X-axis (β)</div>
-            <div>{rotationRate.beta.toFixed(2)}</div>
+            <div>{rotationRate.beta.toFixed(1)}</div>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div>Y-axis (γ)</div>
-            <div>{rotationRate.gamma.toFixed(2)}</div>
+            <div>{rotationRate.gamma.toFixed(1)}</div>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div>Z-axis (α)</div>
-            <div>{rotationRate.alpha.toFixed(2)}</div>
+            <div>{rotationRate.alpha.toFixed(1)}</div>
           </div>
         </div>
       </div>

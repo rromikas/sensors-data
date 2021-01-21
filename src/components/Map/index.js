@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import ReactMapboxGl, { Marker } from "react-mapbox-gl";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import CenterIcon from "./center.svg";
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
 mapboxgl.workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
@@ -21,17 +22,55 @@ function onLocationError(er) {
   alert("Error" + er.message);
 }
 
-const Mark = () => {
+const UserMarker = () => {
+  return (
+    <div
+      className="pulsating-circle"
+      style={{
+        pointerEvents: "none",
+        width: 30,
+        height: 30,
+        borderRadius: "50%",
+        border: "4px solid white",
+        background: "deepskyblue",
+      }}
+    ></div>
+  );
+};
+
+const CenteringMarker = ({ setUserLocation }) => {
   return (
     <div
       style={{
-        width: "50px",
-        height: "50px",
+        width: 60,
+        height: 60,
+        background: "white",
+        position: "fixed",
+        bottom: 20,
+        right: 20,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
         borderRadius: "50%",
-        backgroundColor: "red",
-        pointerEvents: "none",
+        boxShadow: "0px 0px 5px 2px rgba(0,0,0,0.2)",
+        cursor: "pointer",
       }}
-    ></div>
+    >
+      <img
+        src={CenterIcon}
+        onClick={() =>
+          setUserLocation((prev) => {
+            let arr = [...prev];
+            arr[0] = arr[0] + 0.000000001;
+            return arr;
+          })
+        }
+        style={{
+          width: 25,
+          height: 25,
+        }}
+      ></img>
+    </div>
   );
 };
 
@@ -68,8 +107,9 @@ const Component = () => {
       }}
     >
       <Marker coordinates={userLocation} style={{ pointerEvents: "none" }}>
-        <Mark></Mark>
+        <UserMarker></UserMarker>
       </Marker>
+      <CenteringMarker setUserLocation={setUserLocation}></CenteringMarker>
     </Map>
   );
 };

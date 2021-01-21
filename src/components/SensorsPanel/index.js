@@ -60,6 +60,9 @@ const SensorsPanel = () => {
         boxSizing: "border-box",
         borderRadius: "8px",
         width: "100%",
+        maxHeight: "100%",
+        overflowY: "auto",
+        zIndex: 99,
       }}
     >
       <div style={{ marginBottom: "10px" }}>

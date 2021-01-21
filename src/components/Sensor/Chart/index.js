@@ -1,7 +1,7 @@
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import React, { useEffect, useState } from "react";
 
-const RealTimeChart = ({ value }) => {
+const RealTimeChart = ({ value, range }) => {
   const [data, setData] = useState([]);
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -24,7 +24,7 @@ const RealTimeChart = ({ value }) => {
         <Line isAnimationActive={false} type="monotone" dataKey="y" stroke="#3F84E5" />
         <Line isAnimationActive={false} type="monotone" dataKey="z" stroke="#E59124" />
         <CartesianGrid stroke="#ccc" />
-        <XAxis /> <YAxis />
+        <XAxis /> <YAxis domain={range} />
       </LineChart>
     </ResponsiveContainer>
   );

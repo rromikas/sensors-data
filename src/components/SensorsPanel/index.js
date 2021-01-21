@@ -67,22 +67,30 @@ const SensorsPanel = () => {
     >
       <div style={{ marginBottom: "10px" }}>
         <Sensor
+          range={[-180, 360]}
           units={"°"}
           subject="Orientation"
           value={{ x: orientation.beta, y: orientation.gamma, z: orientation.alpha }}
         ></Sensor>
       </div>
       <div style={{ marginBottom: "10px" }}>
-        <Sensor subject="Accelerometer" value={acceleration} units="m/s²"></Sensor>
+        <Sensor
+          range={[-30, 30]}
+          subject="Accelerometer"
+          value={acceleration}
+          units="m/s²"
+        ></Sensor>
       </div>
       <div style={{ marginBottom: "10px" }}>
         <Sensor
+          range={[-30, 30]}
           subject="Accelerometer including gravity"
           value={accelerationIncludingGravity}
           units="m/s²"
         ></Sensor>
       </div>
       <Sensor
+        range={[-200, 200]}
         subject="Gyroscope"
         value={{ x: rotationRate.beta, y: rotationRate.gamma, z: rotationRate.alpha }}
       ></Sensor>

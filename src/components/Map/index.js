@@ -42,8 +42,8 @@ const CenteringMarker = ({ setUserLocation }) => {
   return (
     <div
       style={{
-        width: 60,
-        height: 60,
+        width: 50,
+        height: 50,
         background: "white",
         position: "fixed",
         bottom: 20,
@@ -66,8 +66,8 @@ const CenteringMarker = ({ setUserLocation }) => {
           })
         }
         style={{
-          width: 25,
-          height: 25,
+          width: 20,
+          height: 20,
         }}
       ></img>
     </div>

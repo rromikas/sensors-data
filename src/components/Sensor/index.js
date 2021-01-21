@@ -10,26 +10,35 @@ const Sensor = () => {
   });
   const [rotationRate, setRotationRate] = useState({ alpha: 0, beta: 0, gamma: 0 });
   useEffect(() => {
-    // window.addEventListener("devicemotion", (e) => {
-    //   console.log(" device motion e", e);
-    //   setAcceleration((prev) => Object.assign({}, prev, e.acceleration));
-    //   setAccelerationIncludingGravity((prev) =>
-    //     Object.assign({}, prev, e.accelerationIncludingGravity)
-    //   );
-    //   setRotationRate((prev) =>
-    //     Object.assign({}, prev, {
-    //       alpha: e.rotationRate.alpha || 0,
-    //       beta: e.rotationRate.beta || 0,
-    //       gamma: e.rotationRate.gamma || 0,
-    //     })
-    //   );
-    // });
-    window.addEventListener("deviceorientation", (e) => {
+    const onDeviceMotion = (e) => {
+      console.log(" device motion e", e);
+      setAcceleration((prev) => Object.assign({}, prev, e.acceleration));
+      setAccelerationIncludingGravity((prev) =>
+        Object.assign({}, prev, e.accelerationIncludingGravity)
+      );
+      setRotationRate((prev) =>
+        Object.assign({}, prev, {
+          alpha: e.rotationRate.alpha || 0,
+          beta: e.rotationRate.beta || 0,
+          gamma: e.rotationRate.gamma || 0,
+        })
+      );
+    };
+
+    const onDeviceOrientation = (e) => {
       setOrientation((prev) =>
         Object.assign({}, prev, { alpha: e.alpha || 0, beta: e.beta || 0, gamma: e.gamma || 0 })
       );
       console.log(" device orientation e", e);
-    });
+    };
+
+    window.addEventListener("devicemotion", onDeviceMotion, true);
+    window.addEventListener("deviceorientation", onDeviceOrientation, true);
+
+    return () => {
+      window.removeEventListener("devicemotion", onDeviceMotion);
+      window.removeEventListener("deviceorientation", onDeviceOrientation);
+    };
   }, []);
   return (
     <div

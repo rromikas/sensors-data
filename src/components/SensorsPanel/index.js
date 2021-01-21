@@ -78,7 +78,6 @@ const SensorsPanel = () => {
       <div
         style={{
           position: "absolute",
-          transition: "transform 0.3s",
           pointerEvents: showGraphs ? "all" : "none",
           transform: `translateX(${showGraphs ? 0 : "-100%"})`,
           left: 0,

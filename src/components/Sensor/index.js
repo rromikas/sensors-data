@@ -16,7 +16,13 @@ const Sensor = () => {
       setAccelerationIncludingGravity((prev) =>
         Object.assign({}, prev, e.accelerationIncludingGravity)
       );
-      setRotationRate((prev) => Object.assign({}, prev, e.rotationRate));
+      setRotationRate((prev) =>
+        Object.assign({}, prev, {
+          alpha: e.rotationRate.alpha || 0,
+          beta: e.rotationRate.beta || 0,
+          gamma: e.rotationRate.gamma || 0,
+        })
+      );
     });
     window.addEventListener("deviceorientation", (e) => {
       setOrientation((prev) =>
@@ -49,7 +55,7 @@ const Sensor = () => {
         }}
       >
         <div style={{ marginBottom: 10 }}>
-          <div>Orientation</div>
+          <div className="title">Orientation</div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div>X-axis (β)</div>
             <div>{orientation.beta}</div>
@@ -64,7 +70,7 @@ const Sensor = () => {
           </div>
         </div>
         <div style={{ marginBottom: 10 }}>
-          <div>Accelerometer</div>
+          <div className="title">Accelerometer</div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div>X-axis (β)</div>
             <div>{acceleration.x}</div>
@@ -79,7 +85,7 @@ const Sensor = () => {
           </div>
         </div>
         <div style={{ marginBottom: 10 }}>
-          <div>Accelerometer including gravity</div>
+          <div className="title">Accelerometer including gravity</div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div>X-axis (β)</div>
             <div>{accelerationIncludingGravity.x}</div>
@@ -94,7 +100,7 @@ const Sensor = () => {
           </div>
         </div>
         <div style={{ marginBottom: 10 }}>
-          <div>Gyroscope</div>
+          <div className="title">Gyroscope</div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div>X-axis (β)</div>
             <div>{rotationRate.beta}</div>

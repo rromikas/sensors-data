@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import Map from "./components/Map";
-import Sensors from "./components/SensorsPanel";
+import React, { useState } from "react";
+import Map from "components/Map";
+import Sensors from "components/SensorsPanel";
 import RequestEmailForm from "components/RequestEmailForm";
-import { getCookie, setCookie } from "helpers";
+import { getCookie } from "helpers";
 
 const App = () => {
-  const [isCookieSet, setIsCookieSet] = useState(getCookie("secure-sensors-cookie") ? true : false);
+  const [isCookieSet, setIsCookieSet] = useState(getCookie("secure-sensors-cookie"));
 
   return (
     <>

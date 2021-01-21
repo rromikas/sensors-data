@@ -8,16 +8,6 @@ const Map = ReactMapboxGl({
     "pk.eyJ1Ijoicm9taWthcyIsImEiOiJjazg0b2ZrOWcwc25mM29xdHFlMHdwenpsIn0.EpdSDBQASiP_K00nvaMMRA",
 });
 
-function onLocationSuccess(position, setUserLocation) {
-  const latitude = position.coords.latitude;
-  const longitude = position.coords.longitude;
-  setUserLocation([longitude, latitude]);
-}
-
-function onLocationError(er) {
-  alert("Error" + er.message);
-}
-
 const UserMarker = () => {
   return (
     <div
@@ -51,16 +41,16 @@ const CenteringMarker = ({ setUserLocation }) => {
         boxShadow: "0px 0px 5px 2px rgba(0,0,0,0.1)",
         cursor: "pointer",
       }}
+      onClick={() =>
+        setUserLocation((prev) => {
+          let arr = [...prev];
+          arr[0] = arr[0] + 0.000000001;
+          return arr;
+        })
+      }
     >
       <img
         src={CenterIcon}
-        onClick={() =>
-          setUserLocation((prev) => {
-            let arr = [...prev];
-            arr[0] = arr[0] + 0.000000001;
-            return arr;
-          })
-        }
         style={{
           width: 20,
           height: 20,
@@ -74,6 +64,15 @@ const Component = () => {
   const [userLocation, setUserLocation] = useState([54.91284224031921, 54.91284224031921]);
 
   useEffect(() => {
+    function onLocationSuccess(position, setUserLocation) {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+      setUserLocation([longitude, latitude]);
+    }
+
+    function onLocationError(er) {
+      alert("Error" + er.message);
+    }
     let watchId;
     if (!navigator.geolocation) {
       alert("Browser doesn't support geolocation detector");
@@ -87,6 +86,7 @@ const Component = () => {
       );
     }
     return () => {
+      console.log("watchid", watchId);
       if (watchId) {
         navigator.geolocation.clearWatch(watchId);
       }

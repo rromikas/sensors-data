@@ -52,7 +52,7 @@ const CenteringMarker = ({ setUserLocation }) => {
         alignItems: "center",
         justifyContent: "center",
         borderRadius: "50%",
-        boxShadow: "0px 0px 5px 2px rgba(0,0,0,0.2)",
+        boxShadow: "0px 0px 5px 2px rgba(0,0,0,0.1)",
         cursor: "pointer",
       }}
     >

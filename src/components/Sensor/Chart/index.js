@@ -1,4 +1,12 @@
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from "recharts";
+import {
+  LineChart,
+  Line,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  ResponsiveContainer,
+  Legend,
+} from "recharts";
 import React, { useEffect, useState } from "react";
 
 const RealTimeChart = ({ value, range }) => {
@@ -25,6 +33,12 @@ const RealTimeChart = ({ value, range }) => {
         <Line isAnimationActive={false} type="monotone" dataKey="z" stroke="#E59124" />
         <CartesianGrid stroke="#ccc" />
         <XAxis /> <YAxis domain={range} />
+        <Legend
+          verticalAlign="top"
+          height={36}
+          align="right"
+          wrapperStyle={{ height: 0, top: -30, right: -10, textAlign: "right" }}
+        />
       </LineChart>
     </ResponsiveContainer>
   );

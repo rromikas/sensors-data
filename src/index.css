@@ -12,4 +12,15 @@ body,
 .title {
   font-weight: 700;
 }
+
+#root {
+  overflow: auto;
+}
+
+.user-select-none {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
 /*# sourceMappingURL=index.css.map */

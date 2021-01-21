@@ -3,7 +3,6 @@ import RealTimeChart from "./Chart";
 
 const Sensor = ({ value, subject, units, range }) => {
   const { x, y, z } = value;
-  console.log("x,yz", z, y, z, subject);
   return (
     <div
       style={{
@@ -14,27 +13,31 @@ const Sensor = ({ value, subject, units, range }) => {
         width: "100%",
       }}
     >
-      <div className="title" style={{ marginBottom: "10px" }}>
-        {subject}
+      <div style={{ display: "flex" }}>
+        <div className="title" style={{ marginBottom: "10px", flexGrow: 1 }}>
+          {subject}
+        </div>
+        <div style={{ width: 130 }}></div>
       </div>
+
       <div style={{ display: "flex" }}>
         <div style={{ width: "50px" }}>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <div>x:</div>
+            <div style={{ marginRight: 4 }}>x:</div>
             <div>
               {x.toFixed(1)}
               {units}
             </div>
           </div>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <div>y:</div>
+            <div style={{ marginRight: 4 }}>y:</div>
             <div>
               {y.toFixed(1)}
               {units}
             </div>
           </div>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <div>z:</div>
+            <div style={{ marginRight: 4 }}>z:</div>
             <div>
               {z.toFixed(1)}
               {units}

@@ -12,3 +12,11 @@ body,
 .title {
   font-weight: 700;
 }
+
+#root {
+  overflow: auto;
+}
+
+.user-select-none {
+  user-select: none;
+}

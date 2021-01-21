@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Sensor from "../Sensor";
+import GraphIcon from "./graph.svg";
 
 const SensorsPanel = () => {
+  const [showGraphs, setShowGraphs] = useState(true);
   const [orientation, setOrientation] = useState({ alpha: 0, beta: 0, gamma: 0 });
   const [acceleration, setAcceleration] = useState({ x: 0, y: 0, z: 0 });
   const [accelerationIncludingGravity, setAccelerationIncludingGravity] = useState({
@@ -51,50 +53,89 @@ const SensorsPanel = () => {
     };
   }, []);
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        padding: "20px",
-        boxSizing: "border-box",
-        borderRadius: "8px",
-        width: "100%",
-        maxHeight: "100%",
-        overflowY: "auto",
-        zIndex: 99,
-      }}
-    >
-      <div style={{ marginBottom: "10px" }}>
-        <Sensor
-          range={[-180, 360]}
-          units={"°"}
-          subject="Orientation"
-          value={{ x: orientation.beta, y: orientation.gamma, z: orientation.alpha }}
-        ></Sensor>
+    <>
+      <div
+        onClick={() => setShowGraphs(!showGraphs)}
+        className="user-select-none"
+        style={{
+          position: "fixed",
+          zIndex: 100,
+          top: 5,
+          left: 0,
+          height: 42,
+          width: 100,
+          borderRadius: "0 25px 25px 0",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          background: "white",
+          cursor: "pointer",
+          boxShadow: "0px 0px 5px 2px rgba(0,0,0,0.1)",
+        }}
+      >
+        <img src={GraphIcon}></img>
       </div>
-      <div style={{ marginBottom: "10px" }}>
-        <Sensor
-          range={[-15, 15]}
-          subject="Accelerometer"
-          value={acceleration}
-          units="m/s²"
-        ></Sensor>
+      <div
+        style={{
+          position: "absolute",
+          transition: "transform 0.3s",
+          pointerEvents: showGraphs ? "all" : "none",
+          transform: `translateX(${showGraphs ? 0 : "-100%"})`,
+          left: 0,
+          top: 0,
+          zIndex: "99",
+          width: "100%",
+          maxHeight: "100%",
+          overflow: "auto",
+          display: "flex",
+        }}
+      >
+        <div
+          style={{
+            paddingTop: 40,
+            boxSizing: "border-box",
+            borderRadius: "8px",
+            width: "100%",
+            zIndex: 99,
+            display: "flex",
+            flexWrap: "wrap",
+            padding: "50px 10px 10px 10px",
+          }}
+        >
+          <div style={{ padding: "10px", maxWidth: "500px", width: "100%" }}>
+            <Sensor
+              range={[-180, 360]}
+              units={"°"}
+              subject="Orientation"
+              value={{ x: orientation.beta, y: orientation.gamma, z: orientation.alpha }}
+            ></Sensor>
+          </div>
+          <div style={{ padding: "10px", maxWidth: "500px", width: "100%" }}>
+            <Sensor
+              range={[-15, 15]}
+              subject="Accelerometer"
+              value={acceleration}
+              units="m/s²"
+            ></Sensor>
+          </div>
+          <div style={{ padding: "10px", maxWidth: "500px", width: "100%" }}>
+            <Sensor
+              range={[-30, 30]}
+              subject="Accelerometer including gravity"
+              value={accelerationIncludingGravity}
+              units="m/s²"
+            ></Sensor>
+          </div>
+          <div style={{ maxWidth: "500px", width: "100%", padding: "10px" }}>
+            <Sensor
+              range={[-200, 200]}
+              subject="Gyroscope"
+              value={{ x: rotationRate.beta, y: rotationRate.gamma, z: rotationRate.alpha }}
+            ></Sensor>
+          </div>
+        </div>
       </div>
-      <div style={{ marginBottom: "10px" }}>
-        <Sensor
-          range={[-30, 30]}
-          subject="Accelerometer including gravity"
-          value={accelerationIncludingGravity}
-          units="m/s²"
-        ></Sensor>
-      </div>
-      <Sensor
-        range={[-200, 200]}
-        subject="Gyroscope"
-        value={{ x: rotationRate.beta, y: rotationRate.gamma, z: rotationRate.alpha }}
-      ></Sensor>
-    </div>
+    </>
   );
 };
 

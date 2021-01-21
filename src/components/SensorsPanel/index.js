@@ -113,7 +113,7 @@ const SensorsPanel = () => {
             </div>
             <div style={{ padding: "10px", maxWidth: "500px", width: "100%" }}>
               <Sensor
-                range={[-15, 15]}
+                range={[-10, 10]}
                 subject="Accelerometer"
                 value={acceleration}
                 units="m/s²"

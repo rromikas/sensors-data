@@ -10,7 +10,6 @@ import {
 } from "recharts";
 
 function Chart({ value, range }) {
-  const [time, setTime] = useState("");
   const [arr, setArr] = useState([]);
   const timeoutRef = useRef(null);
   const realValue = useRef({ x: 0, y: 0, x: 0 });
@@ -38,14 +37,13 @@ function Chart({ value, range }) {
 
   return (
     <div>
-      <h1>{time}</h1>
       <ResponsiveContainer width={"100%"} height={140}>
-        <LineChart data={arr} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+        <LineChart data={arr}>
           <CartesianGrid strokeDasharray="3 3" />
 
           <YAxis domain={range} />
           <Tooltip />
-          <Legend />
+          <Legend align="right" verticalAlign="top" wrapperStyle={{ height: 0, top: -30 }} />
           <Line type="monotone" dataKey="x" stroke="#B20D30" />
           <Line type="monotone" dataKey="y" stroke="#3F84E5" />
           <Line type="monotone" dataKey="z" stroke="#E59124" />

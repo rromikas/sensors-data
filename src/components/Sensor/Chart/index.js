@@ -12,13 +12,17 @@ import React, { useEffect, useState } from "react";
 const RealTimeChart = ({ value, range }) => {
   const [data, setData] = useState([]);
   useEffect(() => {
-    setData((prev) => {
-      let arr = [...prev];
-      if (arr.length == 10) {
-        arr.splice(arr.length - 1, 1);
-      }
-      return [value, ...arr];
-    });
+    const timeout = setTimeout(() => {
+      setData((prev) => {
+        let arr = [...prev];
+        if (arr.length == 10) {
+          arr.splice(arr.length - 1, 1);
+        }
+        return [value, ...arr];
+      });
+    }, 1000);
+
+    return () => clearTimeout(timeout);
   }, [value]);
 
   return (

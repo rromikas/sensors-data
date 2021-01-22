@@ -58,8 +58,8 @@ const SensorsPanel = () => {
     };
 
     if (showGraphs) {
-      window.addEventListener("devicemotion", onDeviceMotion, true);
-      window.addEventListener("deviceorientation", onDeviceOrientation, true);
+      window.addEventListener("devicemotion", onDeviceMotion);
+      window.addEventListener("deviceorientation", onDeviceOrientation);
     }
 
     return () => {

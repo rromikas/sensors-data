@@ -15,8 +15,7 @@ const SensorsPanel = () => {
   const [rotationRate, setRotationRate] = useState({ alpha: 0, beta: 0, gamma: 0 });
 
   useEffect(() => {
-    const onDeviceMotion = (e) => {
-      console.log("device motion detected", e);
+    const onDeviceMotion = async (e) => {
       setAcceleration((prev) =>
         Object.assign({}, prev, {
           x: e.acceleration.x || 0,
@@ -40,8 +39,7 @@ const SensorsPanel = () => {
       );
     };
 
-    const onDeviceOrientation = (e) => {
-      console.log("device orientation detected", e);
+    const onDeviceOrientation = async (e) => {
       setOrientation((prev) =>
         Object.assign({}, prev, { alpha: e.alpha || 0, beta: e.beta || 0, gamma: e.gamma || 0 })
       );

@@ -111,7 +111,7 @@ const SensorsPanel = () => {
                 <Sensor
                   id="orientation"
                   sendSensorData={SendSensorData}
-                  range={[-160, 380]}
+                  range={[-200, 380]}
                   units={"°"}
                   subject="Orientation"
                   value={{ x: orientation.beta, y: orientation.gamma, z: orientation.alpha }}
@@ -142,7 +142,7 @@ const SensorsPanel = () => {
                   id="rotationRate"
                   sendSensorData={SendSensorData}
                   range={[-220, 220]}
-                  subject="Gyroscope"
+                  subject="Rotation rate"
                   value={{ x: rotationRate.beta, y: rotationRate.gamma, z: rotationRate.alpha }}
                 ></Sensor>
               </div>

@@ -57,6 +57,7 @@ const chartConfig = (range) => {
 };
 
 var charts = {};
+
 export const renderChart = (id, range) => {
   var ctx = document.getElementById(id).getContext("2d");
   charts[id] = new window.Chart(ctx, chartConfig([range[0], range[1]]));

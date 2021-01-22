@@ -111,7 +111,7 @@ const SensorsPanel = () => {
                 <Sensor
                   id="orientation"
                   sendSensorData={SendSensorData}
-                  range={[-180, 360]}
+                  range={[-160, 380]}
                   units={"°"}
                   subject="Orientation"
                   value={{ x: orientation.beta, y: orientation.gamma, z: orientation.alpha }}

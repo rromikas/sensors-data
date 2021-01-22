@@ -4,13 +4,10 @@ import { LineChart, CartesianGrid, YAxis, Legend, Line, ResponsiveContainer } fr
 function Chart({ value, range, sendSensorData }) {
   const interval = 6000;
   const [arr, setArr] = useState([]);
-  const [refresh, setRefresh] = useState(false);
-  const [updates, setUpdates] = useState(0);
   const timeoutRef = useRef(null);
   const realValue = useRef({ x: 0, y: 0, x: 0 });
   function validate() {
-    setArr((prevState) => [...prevState, realValue.current].slice(-10));
-    setUpdates((prev) => prev + 1);
+    setArr((prevState) => [...prevState, realValue.current].slice(-50));
   }
 
   useEffect(() => {
@@ -25,18 +22,11 @@ function Chart({ value, range, sendSensorData }) {
         //sendSensorData(realValue.current);
       }, i * speed);
     }
-  }, [refresh]);
+  }, []);
 
   useEffect(() => {
     realValue.current = value;
   }, [value]);
-
-  useEffect(() => {
-    if (updates === interval) {
-      setUpdates(0);
-      setRefresh(!refresh);
-    }
-  }, [updates]);
 
   return (
     <div>

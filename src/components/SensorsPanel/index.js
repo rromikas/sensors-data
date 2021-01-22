@@ -109,6 +109,7 @@ const SensorsPanel = () => {
             >
               <div style={{ padding: "10px", maxWidth: "500px", width: "100%" }}>
                 <Sensor
+                  id="orientation"
                   sendSensorData={SendSensorData}
                   range={[-180, 360]}
                   units={"°"}
@@ -118,6 +119,7 @@ const SensorsPanel = () => {
               </div>
               <div style={{ padding: "10px", maxWidth: "500px", width: "100%" }}>
                 <Sensor
+                  id="accelerometer"
                   sendSensorData={SendSensorData}
                   range={[-10, 10]}
                   subject="Accelerometer"
@@ -127,6 +129,7 @@ const SensorsPanel = () => {
               </div>
               <div style={{ padding: "10px", maxWidth: "500px", width: "100%" }}>
                 <Sensor
+                  id="accelerometerIncludingGravity"
                   sendSensorData={SendSensorData}
                   range={[-30, 30]}
                   subject="Accelerometer including gravity"
@@ -136,6 +139,7 @@ const SensorsPanel = () => {
               </div>
               <div style={{ maxWidth: "500px", width: "100%", padding: "10px" }}>
                 <Sensor
+                  id="rotationRate"
                   sendSensorData={SendSensorData}
                   range={[-200, 200]}
                   subject="Gyroscope"

@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { LineChart, CartesianGrid, YAxis, Legend, Line, ResponsiveContainer } from "recharts";
+import { renderChart, updateData } from "./sandbox";
 
-function Chart({ value, range, sendSensorData }) {
+function Chart({ value, range, sendSensorData, id }) {
   const interval = 6000;
   const [arr, setArr] = useState([]);
   const timeoutRef = useRef(null);
@@ -18,7 +19,7 @@ function Chart({ value, range, sendSensorData }) {
     for (let i = 0; i < interval; i++) {
       timeoutRef.current = setTimeout(() => {
         timeoutRef.current = null;
-        validate();
+        updateData(id, realValue.current);
         //sendSensorData(realValue.current);
       }, i * speed);
     }
@@ -28,9 +29,14 @@ function Chart({ value, range, sendSensorData }) {
     realValue.current = value;
   }, [value]);
 
+  useEffect(() => {
+    renderChart(id, range);
+  }, []);
+
   return (
-    <div>
-      <ResponsiveContainer width={"100%"} height={140}>
+    <div style={{ height: 140, width: "100%" }}>
+      <canvas id={id}></canvas>
+      {/* <ResponsiveContainer width={"100%"} height={140}>
         <LineChart data={arr}>
           <CartesianGrid strokeDasharray="3 3" />
           <YAxis domain={range} />
@@ -39,7 +45,7 @@ function Chart({ value, range, sendSensorData }) {
           <Line type="monotone" dataKey="y" stroke="#3F84E5" />
           <Line type="monotone" dataKey="z" stroke="#E59124" />
         </LineChart>
-      </ResponsiveContainer>
+      </ResponsiveContainer> */}
     </div>
   );
 }

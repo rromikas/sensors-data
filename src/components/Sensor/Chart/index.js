@@ -2,31 +2,41 @@ import { useState, useEffect, useRef } from "react";
 import { LineChart, CartesianGrid, YAxis, Legend, Line, ResponsiveContainer } from "recharts";
 
 function Chart({ value, range, sendSensorData }) {
+  const interval = 6000;
   const [arr, setArr] = useState([]);
+  const [refresh, setRefresh] = useState(false);
+  const [updates, setUpdates] = useState(0);
   const timeoutRef = useRef(null);
   const realValue = useRef({ x: 0, y: 0, x: 0 });
   function validate() {
     setArr((prevState) => [...prevState, realValue.current].slice(-10));
+    setUpdates((prev) => prev + 1);
   }
 
   useEffect(() => {
     if (timeoutRef.current !== null) {
       clearTimeout(timeoutRef.current);
     }
-    let interval = 60000;
     let speed = 100;
     for (let i = 0; i < interval; i++) {
       timeoutRef.current = setTimeout(() => {
         timeoutRef.current = null;
         validate();
-        sendSensorData(realValue.current);
+        //sendSensorData(realValue.current);
       }, i * speed);
     }
-  }, []);
+  }, [refresh]);
 
   useEffect(() => {
     realValue.current = value;
   }, [value]);
+
+  useEffect(() => {
+    if (updates === interval) {
+      setUpdates(0);
+      setRefresh(!refresh);
+    }
+  }, [updates]);
 
   return (
     <div>

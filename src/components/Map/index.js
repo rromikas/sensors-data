@@ -60,7 +60,7 @@ const CenteringMarker = ({ setUserLocation }) => {
   );
 };
 
-const Component = () => {
+const Component = ({ onReady }) => {
   const [userLocation, setUserLocation] = useState([54.91284224031921, 54.91284224031921]);
 
   useEffect(() => {
@@ -94,6 +94,7 @@ const Component = () => {
 
   return (
     <Map
+      onStyleLoad={onReady}
       style="mapbox://styles/mapbox/streets-v9"
       center={userLocation}
       containerStyle={{

@@ -56,7 +56,6 @@ const chartConfig = (range) => {
   };
 };
 
-var data = { x: 0, y: 0, z: 0 };
 var charts = {};
 export const renderChart = (id, range) => {
   var ctx = document.getElementById(id).getContext("2d");
@@ -64,11 +63,18 @@ export const renderChart = (id, range) => {
 };
 
 export const updateData = (id, value) => {
-  charts[id].data.datasets[0].data.shift();
-  charts[id].data.datasets[0].data.push(value.x);
-  charts[id].data.datasets[1].data.shift();
-  charts[id].data.datasets[1].data.push(value.y);
-  charts[id].data.datasets[2].data.shift();
-  charts[id].data.datasets[2].data.push(value.z);
-  charts[id].update({ duration: 0 });
+  if (id in charts) {
+    charts[id].data.datasets[0].data.shift();
+    charts[id].data.datasets[0].data.push(value.x);
+    charts[id].data.datasets[1].data.shift();
+    charts[id].data.datasets[1].data.push(value.y);
+    charts[id].data.datasets[2].data.shift();
+    charts[id].data.datasets[2].data.push(value.z);
+    charts[id].update({ duration: 0 });
+  }
+};
+
+export const destroyChart = (id) => {
+  charts[id].destroy();
+  delete charts[id];
 };

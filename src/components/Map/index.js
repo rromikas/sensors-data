@@ -71,7 +71,7 @@ const Component = ({ onReady }) => {
     }
 
     function onLocationError(er) {
-      alert("Error" + er.message);
+      alert("Error:  " + er.message);
     }
     let watchId;
     if (!navigator.geolocation) {

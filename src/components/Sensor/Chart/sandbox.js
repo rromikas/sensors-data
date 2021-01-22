@@ -59,7 +59,7 @@ const chartConfig = (range) => {
 var charts = {};
 export const renderChart = (id, range) => {
   var ctx = document.getElementById(id).getContext("2d");
-  charts[id] = new window.Chart(ctx, chartConfig([range[0 - 20], range[1] + 20]));
+  charts[id] = new window.Chart(ctx, chartConfig([range[0] - 20, range[1] + 20]));
 };
 
 export const updateData = (id, value) => {

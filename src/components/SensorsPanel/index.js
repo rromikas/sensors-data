@@ -13,6 +13,17 @@ const SensorsPanel = () => {
     z: 0,
   });
   const [rotationRate, setRotationRate] = useState({ alpha: 0, beta: 0, gamma: 0 });
+  const [a, setA] = useState({ x: 0, y: 0, z: 0 });
+
+  useEffect(() => {
+    let interval = 6000;
+    let speed = 100;
+    for (let i = 1; i < interval; i++) {
+      setTimeout(() => {
+        setA({ x: Math.random(), y: Math.random(), z: Math.random() });
+      }, i * speed);
+    }
+  }, []);
   useEffect(() => {
     const onDeviceMotion = (e) => {
       setAcceleration((prev) =>
@@ -138,6 +149,9 @@ const SensorsPanel = () => {
                 subject="Gyroscope"
                 value={{ x: rotationRate.beta, y: rotationRate.gamma, z: rotationRate.alpha }}
               ></Sensor>
+            </div>
+            <div style={{ maxWidth: "500px", width: "100%", padding: "10px" }}>
+              <Sensor range={[-1, 1]} subject="Test Random" value={a}></Sensor>
             </div>
           </div>
         </div>

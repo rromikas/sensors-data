@@ -9,7 +9,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-function Chart({ value, range }) {
+function Chart({ value, range, sendSensorData, subject }) {
   const [arr, setArr] = useState([]);
   const intervalRef = useRef(null);
   const realValue = useRef({ x: 0, y: 0, x: 0 });
@@ -25,6 +25,7 @@ function Chart({ value, range }) {
     intervalRef.current = setInterval(() => {
       intervalRef.current = null;
       validate();
+      sendSensorData(subject, realValue.current);
     }, speed);
 
     return () => clearInterval(intervalRef.current);

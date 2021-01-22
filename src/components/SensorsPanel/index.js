@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Sensor from "../Sensor";
 import GraphIcon from "./graph.svg";
+import { SendSensorData } from "api";
 
 const SensorsPanel = () => {
   const [showGraphs, setShowGraphs] = useState(true);
@@ -105,6 +106,7 @@ const SensorsPanel = () => {
           >
             <div style={{ padding: "10px", maxWidth: "500px", width: "100%" }}>
               <Sensor
+                sendSensorData={SendSensorData}
                 range={[-180, 360]}
                 units={"°"}
                 subject="Orientation"
@@ -113,6 +115,7 @@ const SensorsPanel = () => {
             </div>
             <div style={{ padding: "10px", maxWidth: "500px", width: "100%" }}>
               <Sensor
+                sendSensorData={SendSensorData}
                 range={[-10, 10]}
                 subject="Accelerometer"
                 value={acceleration}
@@ -121,6 +124,7 @@ const SensorsPanel = () => {
             </div>
             <div style={{ padding: "10px", maxWidth: "500px", width: "100%" }}>
               <Sensor
+                sendSensorData={SendSensorData}
                 range={[-30, 30]}
                 subject="Accelerometer including gravity"
                 value={accelerationIncludingGravity}
@@ -129,6 +133,7 @@ const SensorsPanel = () => {
             </div>
             <div style={{ maxWidth: "500px", width: "100%", padding: "10px" }}>
               <Sensor
+                sendSensorData={SendSensorData}
                 range={[-200, 200]}
                 subject="Gyroscope"
                 value={{ x: rotationRate.beta, y: rotationRate.gamma, z: rotationRate.alpha }}

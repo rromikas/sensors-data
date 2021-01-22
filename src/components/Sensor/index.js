@@ -1,7 +1,7 @@
 import React from "react";
 import RealTimeChart from "./Chart";
 
-const Sensor = ({ value, subject, units, range }) => {
+const Sensor = ({ value, subject, units, range, sendSensorData }) => {
   const { x, y, z } = value;
   return (
     <div
@@ -45,7 +45,12 @@ const Sensor = ({ value, subject, units, range }) => {
           </div>
         </div>
         <div style={{ flexGrow: 1, width: 0 }}>
-          <RealTimeChart value={value} range={range}></RealTimeChart>
+          <RealTimeChart
+            sendSensorData={sendSensorData}
+            value={value}
+            range={range}
+            subject={subject}
+          ></RealTimeChart>
         </div>
       </div>
     </div>

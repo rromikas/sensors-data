@@ -86,7 +86,6 @@ const Component = () => {
       );
     }
     return () => {
-      console.log("watchid", watchId);
       if (watchId) {
         navigator.geolocation.clearWatch(watchId);
       }

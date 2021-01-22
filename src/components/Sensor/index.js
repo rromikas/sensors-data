@@ -3,6 +3,10 @@ import RealTimeChart from "./Chart";
 
 const Sensor = ({ value, subject, units, range, sendSensorData, id }) => {
   const { x, y, z } = value;
+  const markStyle = (color) => {
+    return { width: 20, height: 7, borderRadius: 5, background: color, marginRight: 5 };
+  };
+  const badgeContainerStyle = { display: "flex", alignItems: "center" };
   return (
     <div
       style={{
@@ -13,30 +17,29 @@ const Sensor = ({ value, subject, units, range, sendSensorData, id }) => {
         width: "100%",
       }}
     >
-      <div style={{ display: "flex" }}>
-        <div className="title" style={{ marginBottom: "10px", flexGrow: 1 }}>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div className="title" style={{ marginBottom: "10px", paddingRight: 10, flexGrow: 1 }}>
           {subject}
         </div>
-        <div style={{ width: 130 }}></div>
-      </div>
-
-      <div style={{ display: "flex" }}>
-        <div style={{ width: "50px" }}>
-          <div style={{ display: "flex", alignItems: "center" }}>
+        <div>
+          <div style={badgeContainerStyle}>
+            <div style={markStyle("deeppink")}></div>
             <div style={{ marginRight: 4 }}>x:</div>
             <div>
               {x.toFixed(1)}
               {units}
             </div>
           </div>
-          <div style={{ display: "flex", alignItems: "center" }}>
+          <div style={badgeContainerStyle}>
+            <div style={markStyle("deepskyblue")}></div>
             <div style={{ marginRight: 4 }}>y:</div>
             <div>
               {y.toFixed(1)}
               {units}
             </div>
           </div>
-          <div style={{ display: "flex", alignItems: "center" }}>
+          <div style={badgeContainerStyle}>
+            <div style={markStyle("rebeccapurple")}></div>
             <div style={{ marginRight: 4 }}>z:</div>
             <div>
               {z.toFixed(1)}
@@ -44,16 +47,15 @@ const Sensor = ({ value, subject, units, range, sendSensorData, id }) => {
             </div>
           </div>
         </div>
-        <div style={{ flexGrow: 1, width: 0 }}>
-          <RealTimeChart
-            id={id}
-            sendSensorData={sendSensorData}
-            value={value}
-            range={range}
-            subject={subject}
-          ></RealTimeChart>
-        </div>
       </div>
+
+      <RealTimeChart
+        id={id}
+        sendSensorData={sendSensorData}
+        value={value}
+        range={range}
+        subject={subject}
+      ></RealTimeChart>
     </div>
   );
 };

@@ -7,7 +7,7 @@ const chartConfig = (range) => {
         {
           label: "x",
           data: new Array(50).fill(0),
-          borderColor: "rgba(255, 99, 132, 1)",
+          borderColor: "deeppink",
           borderWidth: 1,
           backgroundColor: "transparent",
         },
@@ -42,6 +42,10 @@ const chartConfig = (range) => {
             },
           },
         ],
+      },
+      tooltips: false,
+      legend: {
+        display: false,
       },
       elements: {
         point: {

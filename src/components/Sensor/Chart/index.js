@@ -11,24 +11,23 @@ import {
 
 function Chart({ value, range }) {
   const [arr, setArr] = useState([]);
-  const timeoutRef = useRef(null);
+  const intervalRef = useRef(null);
   const realValue = useRef({ x: 0, y: 0, x: 0 });
   function validate() {
     setArr((prevState) => [...prevState, realValue.current].slice(-10));
   }
 
   useEffect(() => {
-    if (timeoutRef.current !== null) {
-      clearTimeout(timeoutRef.current);
+    if (intervalRef.current !== null) {
+      clearTimeout(intervalRef.current);
     }
-    let interval = 6000;
     let speed = 100;
-    for (let i = 0; i < interval; i++) {
-      timeoutRef.current = setTimeout(() => {
-        timeoutRef.current = null;
-        validate();
-      }, i * speed);
-    }
+    intervalRef.current = setInterval(() => {
+      intervalRef.current = null;
+      validate();
+    }, speed);
+
+    return () => clearInterval(intervalRef.current);
   }, []);
 
   useEffect(() => {
@@ -42,7 +41,6 @@ function Chart({ value, range }) {
           <CartesianGrid strokeDasharray="3 3" />
 
           <YAxis domain={range} />
-          <Tooltip />
           <Legend align="right" verticalAlign="top" wrapperStyle={{ height: 0, top: -30 }} />
           <Line type="monotone" dataKey="x" stroke="#B20D30" />
           <Line type="monotone" dataKey="y" stroke="#3F84E5" />

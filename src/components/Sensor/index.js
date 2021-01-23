@@ -7,6 +7,7 @@ import { Row, Col } from "styled-bootstrap-grid";
 const Title = styled.div`
   font-weight: bold;
   font-size: 24px;
+  line-height: 24px;
   color: ${(props) => props.theme.main};
   margin-bottom: 10px;
 `;
@@ -30,7 +31,7 @@ const Sensor = ({
       style={{
         boxSizing: "border-box",
         background: "white",
-        padding: "20px",
+        padding: "1.5rem",
         borderRadius: "8px",
         width: "100%",
       }}

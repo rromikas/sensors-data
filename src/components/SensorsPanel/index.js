@@ -58,7 +58,7 @@ const SensorsPanel = ({ graphView }) => {
 
   return (
     <Container style={{ width: "100%", maxWidth: 1000, padding: "20px 0 50px 0" }}>
-      <Row>
+      <Row style={{ marginLeft: 0, marginRight: 0 }}>
         <Col col={12} md={6}>
           <Sensor
             graphView={graphView}
@@ -82,7 +82,7 @@ const SensorsPanel = ({ graphView }) => {
           ></Sensor>
         </Col>
       </Row>
-      <Row>
+      <Row style={{ marginLeft: 0, marginRight: 0 }}>
         <Col col={12} md={6}>
           <Sensor
             graphView={graphView}

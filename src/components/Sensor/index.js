@@ -1,18 +1,30 @@
 import React from "react";
 import RealTimeChart from "./Chart";
+import Figure from "./Figure";
+import styled from "styled-components";
+import { Row, Col } from "styled-bootstrap-grid";
 
-const Sensor = ({ value, subject, units, range, sendSensorData, id }) => {
-  const { x, y, z } = value;
-  const markStyle = (color) => {
-    return { width: 20, height: 7, borderRadius: 5, background: color, marginRight: 5 };
-  };
-  const badgeContainerStyle = {
-    display: "flex",
-    alignItems: "center",
-    maxWidth: "100px",
-    width: "100%",
-  };
-  const valueDiv = { flexGrow: 1, display: "flex", justifyContent: "flex-end" };
+const Title = styled.div`
+  font-weight: bold;
+  font-size: 24px;
+  color: ${(props) => props.theme.main};
+  margin-bottom: 10px;
+`;
+
+const markStyle = (color) => {
+  return { width: 20, height: 7, borderRadius: 5, background: color, marginRight: 5 };
+};
+
+const Sensor = ({
+  value,
+  subject,
+  units,
+  range,
+  sendSensorData,
+  id,
+  graphView,
+  labels = ["x", "y", "z"],
+}) => {
   return (
     <div
       style={{
@@ -23,45 +35,35 @@ const Sensor = ({ value, subject, units, range, sendSensorData, id }) => {
         width: "100%",
       }}
     >
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <div className="title" style={{ marginBottom: "10px", paddingRight: 10, flexGrow: 1 }}>
-          {subject}
-        </div>
-        <div style={{ maxWidth: "100px", width: "100%" }}>
-          <div style={badgeContainerStyle}>
+      <Title>{subject}</Title>
+      {graphView && (
+        <div style={{ display: "flex", marginBottom: 10 }}>
+          <div style={{ display: "flex", alignItems: "center", marginRight: 5 }}>
             <div style={markStyle("deeppink")}></div>
-            <div style={{ marginRight: 4 }}>x:</div>
-            <div style={valueDiv}>
-              {x.toFixed(1)}
-              {units}
-            </div>
+            <div style={{ marginRight: 4, lineHeight: "14px" }}>x</div>
           </div>
-          <div style={badgeContainerStyle}>
+          <div style={{ display: "flex", alignItems: "center", marginRight: 5 }}>
             <div style={markStyle("deepskyblue")}></div>
-            <div style={{ marginRight: 4 }}>y:</div>
-            <div style={valueDiv}>
-              {y.toFixed(1)}
-              {units}
-            </div>
+            <div style={{ marginRight: 4, lineHeight: "14px" }}>y</div>
           </div>
-          <div style={badgeContainerStyle}>
+          <div style={{ display: "flex", alignItems: "center" }}>
             <div style={markStyle("rebeccapurple")}></div>
-            <div style={{ marginRight: 4 }}>z:</div>
-            <div style={valueDiv}>
-              {z.toFixed(1)}
-              {units}
-            </div>
+            <div style={{ marginRight: 4, lineHeight: "14px" }}>z</div>
           </div>
         </div>
-      </div>
+      )}
 
-      <RealTimeChart
-        id={id}
-        sendSensorData={sendSensorData}
-        value={value}
-        range={range}
-        subject={subject}
-      ></RealTimeChart>
+      {graphView ? (
+        <RealTimeChart
+          id={id}
+          sendSensorData={sendSensorData}
+          value={value}
+          range={range}
+          subject={subject}
+        ></RealTimeChart>
+      ) : (
+        <Figure value={value} labels={labels} units={units}></Figure>
+      )}
     </div>
   );
 };

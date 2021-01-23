@@ -1,29 +1,31 @@
-import React, { useEffect, useState, Suspense } from "react";
-import Sensors from "components/SensorsPanel";
+import React, { Suspense } from "react";
 import RequestEmailForm from "components/RequestEmailForm";
-import { getCookie } from "helpers";
 import Loader from "components/Loader";
-const Map = React.lazy(() => import("components/Map"));
+import { ThemeProvider } from "styled-components";
+import { Route, Switch } from "react-router-dom";
+import { BaseCSS } from "styled-bootstrap-grid";
+const MainApp = React.lazy(() => import("components/App"));
+
+const theme = {
+  main: "#073B4C",
+  secondary: "#FFD166",
+};
 
 const App = () => {
-  const [isCookieSet, setIsCookieSet] = useState(getCookie("secure-sensors-cookie"));
-  const [isMapLoaded, setMapLoaded] = useState(false);
-  const [isPageLoaded, setPageLoaded] = useState(false);
-
-  useEffect(() => {
-    setPageLoaded(true);
-  }, []);
-
   return (
-    isPageLoaded && (
-      <>
-        {!isCookieSet && <RequestEmailForm setIsCookieSet={setIsCookieSet}></RequestEmailForm>}
-        <Suspense fallback={<div></div>}>
-          <Map onReady={() => setMapLoaded(true)}></Map>
-        </Suspense>
-        {isMapLoaded ? <Sensors></Sensors> : <Loader></Loader>}
-      </>
-    )
+    <ThemeProvider theme={theme}>
+      <BaseCSS></BaseCSS>
+      <Switch>
+        <Route exact path="/">
+          <RequestEmailForm></RequestEmailForm>
+        </Route>
+        <Route exact path="/app/:id">
+          <Suspense fallback={<Loader></Loader>}>
+            <MainApp></MainApp>
+          </Suspense>
+        </Route>
+      </Switch>
+    </ThemeProvider>
   );
 };
 export default App;

@@ -6,11 +6,16 @@ body,
   min-height: 100vh;
   margin: 0;
   padding: 0;
-  font-family: "Lato";
+  font-family: "Cairo", sans-serif;
 }
 
-.title {
-  font-weight: 700;
+* {
+  box-sizing: border-box;
+}
+
+input,
+button {
+  font-family: "Cairo", sans-serif;
 }
 
 #root {
@@ -18,10 +23,7 @@ body,
 }
 
 .user-select-none {
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  user-select: none;
 }
 
 .loader-page {
@@ -31,15 +33,9 @@ body,
   right: 0;
   bottom: 0;
   z-index: 999;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  align-items: center;
+  justify-content: center;
 }
 
 .spinner {
@@ -48,6 +44,7 @@ body,
   height: 40px;
   position: relative;
   text-align: center;
+
   -webkit-animation: sk-rotate 2s infinite linear;
   animation: sk-rotate 2s infinite linear;
 }
@@ -61,6 +58,7 @@ body,
   top: 0;
   background-color: black;
   border-radius: 100%;
+
   -webkit-animation: sk-bounce 2s infinite ease-in-out;
   animation: sk-bounce 2s infinite ease-in-out;
 }
@@ -77,7 +75,6 @@ body,
     -webkit-transform: rotate(360deg);
   }
 }
-
 @keyframes sk-rotate {
   100% {
     transform: rotate(360deg);
@@ -106,4 +103,7 @@ body,
     -webkit-transform: scale(1);
   }
 }
-/*# sourceMappingURL=index.css.map */
+
+::-webkit-input-placeholder {
+  text-align: center;
+}

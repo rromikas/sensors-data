@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ReactMapboxGl, { Marker } from "react-mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import CenterIcon from "./center.svg";
 
 const Map = ReactMapboxGl({
   accessToken:
@@ -24,42 +23,6 @@ const UserMarker = () => {
   );
 };
 
-const CenteringMarker = ({ setUserLocation }) => {
-  return (
-    <div
-      style={{
-        width: 50,
-        height: 50,
-        background: "white",
-        position: "fixed",
-        bottom: 20,
-        right: 20,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        borderRadius: "50%",
-        boxShadow: "0px 0px 5px 2px rgba(0,0,0,0.1)",
-        cursor: "pointer",
-      }}
-      onClick={() =>
-        setUserLocation((prev) => {
-          let arr = [...prev];
-          arr[0] = arr[0] + 0.000000001;
-          return arr;
-        })
-      }
-    >
-      <img
-        src={CenterIcon}
-        style={{
-          width: 20,
-          height: 20,
-        }}
-      ></img>
-    </div>
-  );
-};
-
 const Component = ({ onReady }) => {
   const [userLocation, setUserLocation] = useState([54.91284224031921, 54.91284224031921]);
 
@@ -71,7 +34,9 @@ const Component = ({ onReady }) => {
     }
 
     function onLocationError(er) {
-      alert("Error:  " + er.message);
+      alert(
+        "You previuosly denied permission tou see you geolocation. You can change this permission in browser settings"
+      );
     }
     let watchId;
     if (!navigator.geolocation) {
@@ -105,7 +70,6 @@ const Component = ({ onReady }) => {
       <Marker coordinates={userLocation} style={{ pointerEvents: "none" }}>
         <UserMarker></UserMarker>
       </Marker>
-      <CenteringMarker setUserLocation={setUserLocation}></CenteringMarker>
     </Map>
   );
 };

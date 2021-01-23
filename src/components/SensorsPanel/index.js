@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Sensor from "../Sensor";
-import GraphIcon from "./graph.svg";
 import { SendSensorData } from "api";
+import { Container, Row, Col } from "styled-bootstrap-grid";
 
-const SensorsPanel = () => {
+const SensorsPanel = ({ graphView }) => {
   const [showGraphs, setShowGraphs] = useState(true);
   const [orientation, setOrientation] = useState({ alpha: 0, beta: 0, gamma: 0 });
   const [acceleration, setAcceleration] = useState({ x: 0, y: 0, z: 0 });
@@ -57,102 +57,55 @@ const SensorsPanel = () => {
   }, [showGraphs]);
 
   return (
-    <>
-      <div
-        onClick={() => setShowGraphs(!showGraphs)}
-        className="user-select-none"
-        style={{
-          position: "fixed",
-          zIndex: 100,
-          top: 5,
-          left: 0,
-          height: 42,
-          width: 100,
-          borderRadius: "0 25px 25px 0",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          background: "white",
-          cursor: "pointer",
-          boxShadow: "0px 0px 5px 2px rgba(0,0,0,0.1)",
-        }}
-      >
-        <img src={GraphIcon}></img>
-      </div>
-      {showGraphs ? (
-        <React.Fragment>
-          <div
-            style={{
-              position: "absolute",
-              pointerEvents: showGraphs ? "all" : "none",
-              transform: `translateX(${showGraphs ? 0 : "-100%"})`,
-              left: 0,
-              top: 0,
-              zIndex: "99",
-              width: "100%",
-              maxHeight: "100%",
-              overflow: "auto",
-              display: "flex",
-            }}
-          >
-            <div
-              style={{
-                paddingTop: 40,
-                boxSizing: "border-box",
-                borderRadius: "8px",
-                width: "100%",
-                zIndex: 99,
-                display: "flex",
-                flexWrap: "wrap",
-                padding: "50px 10px 10px 10px",
-              }}
-            >
-              <div style={{ padding: "10px", maxWidth: "500px", width: "100%" }}>
-                <Sensor
-                  id="orientation"
-                  sendSensorData={SendSensorData}
-                  range={[-200, 380]}
-                  units={"°"}
-                  subject="Orientation"
-                  value={{ x: orientation.beta, y: orientation.gamma, z: orientation.alpha }}
-                ></Sensor>
-              </div>
-              <div style={{ padding: "10px", maxWidth: "500px", width: "100%" }}>
-                <Sensor
-                  id="accelerometer"
-                  sendSensorData={SendSensorData}
-                  range={[-10, 10]}
-                  subject="Accelerometer"
-                  value={acceleration}
-                  units="m/s²"
-                ></Sensor>
-              </div>
-              <div style={{ padding: "10px", maxWidth: "500px", width: "100%" }}>
-                <Sensor
-                  id="accelerometerIncludingGravity"
-                  sendSensorData={SendSensorData}
-                  range={[-30, 30]}
-                  subject="Accelerometer including gravity"
-                  value={accelerationIncludingGravity}
-                  units="m/s²"
-                ></Sensor>
-              </div>
-              <div style={{ maxWidth: "500px", width: "100%", padding: "10px" }}>
-                <Sensor
-                  id="rotationRate"
-                  sendSensorData={SendSensorData}
-                  range={[-220, 220]}
-                  subject="Rotation rate"
-                  value={{ x: rotationRate.beta, y: rotationRate.gamma, z: rotationRate.alpha }}
-                ></Sensor>
-              </div>
-            </div>
-          </div>
-        </React.Fragment>
-      ) : (
-        ""
-      )}
-    </>
+    <Container style={{ width: "100%", maxWidth: 1000, padding: "20px 0 50px 0" }}>
+      <Row>
+        <Col col={12} md={6}>
+          <Sensor
+            graphView={graphView}
+            id="orientation"
+            sendSensorData={SendSensorData}
+            range={[-200, 380]}
+            units={"°"}
+            subject="Orientation"
+            value={{ x: orientation.beta, y: orientation.gamma, z: orientation.alpha }}
+          ></Sensor>
+        </Col>
+        <Col col={12} md={6}>
+          <Sensor
+            graphView={graphView}
+            id="accelerometer"
+            sendSensorData={SendSensorData}
+            range={[-10, 10]}
+            subject="Accelerometer"
+            value={acceleration}
+            units="m/s²"
+          ></Sensor>
+        </Col>
+      </Row>
+      <Row>
+        <Col col={12} md={6}>
+          <Sensor
+            graphView={graphView}
+            id="accelerometerIncludingGravity"
+            sendSensorData={SendSensorData}
+            range={[-30, 30]}
+            subject="Accelerometer including gravity"
+            value={accelerationIncludingGravity}
+            units="m/s²"
+          ></Sensor>
+        </Col>
+        <Col col={12} md={6}>
+          <Sensor
+            graphView={graphView}
+            id="rotationRate"
+            sendSensorData={SendSensorData}
+            range={[-220, 220]}
+            subject="Rotation rate"
+            value={{ x: rotationRate.beta, y: rotationRate.gamma, z: rotationRate.alpha }}
+          ></Sensor>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

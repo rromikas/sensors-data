@@ -64,7 +64,7 @@ const App = ({ theme }) => {
           <GraphIcon color={graphView ? theme.secondary : theme.primary}></GraphIcon>
         </ViewSwitcher>
       </Navbar>
-      <div style={{ height: "87%", maxHeight: 679 }}>
+      <div style={{ height: "80%", maxHeight: 679 }}>
         <Map></Map>
       </div>
       <Sensors graphView={graphView}></Sensors>

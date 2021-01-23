@@ -164,7 +164,7 @@ const RequestEmailForm = ({ theme }) => {
               });
             }}
           >
-            <div style={{ padding: 20, color: theme.main }}>
+            <div style={{ padding: 20, color: theme.main, textAlign: "center" }}>
               <Title>Your link has been sent to</Title>
               <div style={{ textAlign: "center", fontSize: 35 }}>{email}</div>
               <a href={`/app/${Date.now()}`}>Overview app</a>

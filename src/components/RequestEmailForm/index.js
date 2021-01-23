@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { GetSecureCookie } from "api";
 import { setCookie } from "helpers";
 import styled, { withTheme } from "styled-components";
 import { Flipper, Flipped, spring } from "react-flip-toolkit";
-import { useHistory } from "react-router-dom";
 
 const EmailInput = styled.input`
   color: ${(props) => props.theme.main};
@@ -73,7 +72,7 @@ const RequestEmailForm = ({ theme }) => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    // let res = await GetSecureCookie(email);
+    GetSecureCookie(email);
     setCookie("secure-sensors-cookie", email, 30);
     setLinkSent(true);
   };

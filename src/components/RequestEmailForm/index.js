@@ -70,37 +70,6 @@ const Title = styled.div`
 const RequestEmailForm = ({ theme }) => {
   const [email, setEmail] = useState("");
   const [linkSent, setLinkSent] = useState(false);
-  const history = useHistory();
-
-  useEffect(() => {
-    function onLocationSuccess(position, setUserLocation) {
-      const latitude = position.coords.latitude;
-      const longitude = position.coords.longitude;
-    }
-
-    function onLocationError(er) {
-      alert(
-        "You previuosly denied permission tou see you geolocation. You can change this permission in browser settings"
-      );
-    }
-    let watchId;
-    if (!navigator.geolocation) {
-      alert("Browser doesn't support geolocation detector");
-    } else {
-      watchId = navigator.geolocation.watchPosition(
-        (position) => onLocationSuccess(position),
-        onLocationError,
-        {
-          enableHighAccuracy: true,
-        }
-      );
-    }
-    return () => {
-      if (watchId) {
-        navigator.geolocation.clearWatch(watchId);
-      }
-    };
-  }, []);
 
   const onSubmit = async (e) => {
     e.preventDefault();

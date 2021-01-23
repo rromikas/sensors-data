@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import ReactMapboxGl, { Marker } from "react-mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { withTheme } from "styled-components";
 
 const Map = ReactMapboxGl({
   accessToken:
     "pk.eyJ1Ijoicm9taWthcyIsImEiOiJjazg0b2ZrOWcwc25mM29xdHFlMHdwenpsIn0.EpdSDBQASiP_K00nvaMMRA",
 });
 
-const UserMarker = () => {
+const UserMarker = ({ color }) => {
   return (
     <div
       className="pulsating-circle"
@@ -17,13 +18,14 @@ const UserMarker = () => {
         height: 30,
         borderRadius: "50%",
         border: "4px solid white",
-        background: "deepskyblue",
+        background: color,
+        boxShadow: `0 0 0 1px ${color}`,
       }}
     ></div>
   );
 };
 
-const Component = ({ onReady }) => {
+const Component = ({ onReady, theme }) => {
   const [userLocation, setUserLocation] = useState([54.91284224031921, 54.91284224031921]);
 
   useEffect(() => {
@@ -68,10 +70,10 @@ const Component = ({ onReady }) => {
       }}
     >
       <Marker coordinates={userLocation} style={{ pointerEvents: "none" }}>
-        <UserMarker></UserMarker>
+        <UserMarker color={theme.danger}></UserMarker>
       </Marker>
     </Map>
   );
 };
 
-export default Component;
+export default withTheme(Component);

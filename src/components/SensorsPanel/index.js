@@ -57,10 +57,11 @@ const SensorsPanel = ({ graphView }) => {
   }, [showGraphs]);
 
   return (
-    <Container style={{ width: "100%", maxWidth: 1000, padding: "20px 0 50px 0" }}>
+    <Container style={{ width: "100%", maxWidth: 1000, padding: "10px 0 50px 0" }}>
       <Row style={{ marginLeft: 0, marginRight: 0 }}>
         <Col col={12} md={6} style={{ paddingLeft: 0, paddingRight: 0 }}>
           <Sensor
+            labels={["X-axis (β)", "Y-axis (γ)", "Z-axis (α)"]}
             graphView={graphView}
             id="orientation"
             sendSensorData={SendSensorData}

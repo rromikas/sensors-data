@@ -1,26 +1,33 @@
 import React from "react";
+import styled, { withTheme } from "styled-components";
 
-const Figure = ({ value, labels, units }) => {
+const Figure = ({ value, labels, units, theme }) => {
   const { x, y, z } = value;
+
+  const Label = styled.div`
+    margin-right: 4px;
+    font-weight: 600;
+    white-space: nowrap;
+  `;
   return (
-    <div>
+    <div style={{ color: theme.main }}>
       <div style={{ maxWidth: "100px", width: "100%" }}>
         <div style={{ display: "flex", alignItems: "center" }}>
-          <div style={{ marginRight: 4 }}>{labels[0]}:</div>
+          <Label>{labels[0]}:</Label>
           <div>
             {x.toFixed(1)}
             {units}
           </div>
         </div>
         <div style={{ display: "flex", alignItems: "center" }}>
-          <div style={{ marginRight: 4 }}>{labels[1]}:</div>
+          <Label>{labels[1]}:</Label>
           <div>
             {y.toFixed(1)}
             {units}
           </div>
         </div>
         <div style={{ display: "flex", alignItems: "center" }}>
-          <div style={{ marginRight: 4 }}>{labels[2]}:</div>
+          <Label>{labels[2]}:</Label>
           <div>
             {z.toFixed(1)}
             {units}
@@ -31,4 +38,4 @@ const Figure = ({ value, labels, units }) => {
   );
 };
 
-export default Figure;
+export default withTheme(Figure);

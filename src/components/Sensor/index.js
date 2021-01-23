@@ -24,7 +24,7 @@ const Sensor = ({
   sendSensorData,
   id,
   graphView,
-  labels = ["x", "y", "z"],
+  labels = ["X-axis", "Y-axis", "Z-axis"],
 }) => {
   return (
     <div

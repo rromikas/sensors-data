@@ -9,6 +9,7 @@ const MainApp = React.lazy(() => import("components/App"));
 const theme = {
   main: "#073B4C",
   secondary: "#FFD166",
+  danger: "#EF476F",
 };
 
 const App = () => {

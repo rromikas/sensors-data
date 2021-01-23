@@ -59,7 +59,7 @@ const SensorsPanel = ({ graphView }) => {
   return (
     <Container style={{ width: "100%", maxWidth: 1000, padding: "20px 0 50px 0" }}>
       <Row style={{ marginLeft: 0, marginRight: 0 }}>
-        <Col col={12} md={6}>
+        <Col col={12} md={6} style={{ paddingLeft: 0, paddingRight: 0 }}>
           <Sensor
             graphView={graphView}
             id="orientation"
@@ -70,7 +70,7 @@ const SensorsPanel = ({ graphView }) => {
             value={{ x: orientation.beta, y: orientation.gamma, z: orientation.alpha }}
           ></Sensor>
         </Col>
-        <Col col={12} md={6}>
+        <Col col={12} md={6} style={{ paddingLeft: 0, paddingRight: 0 }}>
           <Sensor
             graphView={graphView}
             id="accelerometer"
@@ -83,7 +83,7 @@ const SensorsPanel = ({ graphView }) => {
         </Col>
       </Row>
       <Row style={{ marginLeft: 0, marginRight: 0 }}>
-        <Col col={12} md={6}>
+        <Col col={12} md={6} style={{ paddingLeft: 0, paddingRight: 0 }}>
           <Sensor
             graphView={graphView}
             id="accelerometerIncludingGravity"
@@ -94,7 +94,7 @@ const SensorsPanel = ({ graphView }) => {
             units="m/s²"
           ></Sensor>
         </Col>
-        <Col col={12} md={6}>
+        <Col col={12} md={6} style={{ paddingLeft: 0, paddingRight: 0 }}>
           <Sensor
             graphView={graphView}
             id="rotationRate"

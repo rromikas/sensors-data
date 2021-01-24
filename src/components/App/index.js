@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Sensors from "components/SensorsPanel";
 import Map from "components/Map";
 import styled, { withTheme } from "styled-components";
@@ -43,6 +43,7 @@ const App = ({
   const [email, setEmail] = useState("");
   const [graphView, setGraphView] = useState(false);
   const history = useHistory();
+  const watchLocationButton = useRef(null);
 
   useEffect(() => {
     let cookie = getCookie("secure-sensors-cookie");
@@ -51,6 +52,10 @@ const App = ({
     } else {
       history.push("/");
     }
+  }, []);
+
+  useEffect(() => {
+    watchLocationButton.current.click();
   }, []);
 
   return (
@@ -73,6 +78,7 @@ const App = ({
             <GraphIcon color={graphView ? theme.secondary : theme.main}></GraphIcon>
           </SwitchButton>
           <SwitchButton
+            ref={watchLocationButton}
             active={watchLocation}
             onClick={watchLocation ? stopWatchingLocation : startWatchingLocation}
           >

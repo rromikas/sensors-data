@@ -1,4 +1,4 @@
-import React, { Suspense, useState, useRef, useEffect } from "react";
+import React, { Suspense, useState, useEffect } from "react";
 import RequestEmailForm from "components/RequestEmailForm";
 import Loader from "components/Loader";
 import { ThemeProvider } from "styled-components";
@@ -54,7 +54,7 @@ const App = () => {
     if (getCookie("secure-sensors-cookie")) {
       history.push("/app/" + Date.now());
     }
-  }, []);
+  }, [history]);
   return (
     <ThemeProvider theme={theme}>
       <BaseCSS></BaseCSS>

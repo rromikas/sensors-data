@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import Sensor from "../Sensor";
 import { SendSensorData } from "api";
 import { Container, Row, Col } from "styled-bootstrap-grid";
@@ -68,7 +68,7 @@ const SensorsPanel = ({ graphView }) => {
 
   const TurnSensorsOn = () => {
     var ua = navigator.userAgent.toLowerCase();
-    if (ua.indexOf("safari") != -1) {
+    if (ua.indexOf("safari") !== -1) {
       if (ua.indexOf("chrome") > -1) {
         window.addEventListener("devicemotion", onDeviceMotion);
         window.addEventListener("deviceorientation", onDeviceOrientation);
@@ -79,7 +79,7 @@ const SensorsPanel = ({ graphView }) => {
         ) {
           DeviceMotionEvent.requestPermission()
             .then((response) => {
-              if (response == "granted") {
+              if (response === "granted") {
                 window.addEventListener("devicemotion", onDeviceMotion);
               }
             })
@@ -93,7 +93,7 @@ const SensorsPanel = ({ graphView }) => {
         ) {
           DeviceOrientationEvent.requestPermission()
             .then((response) => {
-              if (response == "granted") {
+              if (response === "granted") {
                 window.addEventListener("deviceorientation", onDeviceOrientation);
               }
             })

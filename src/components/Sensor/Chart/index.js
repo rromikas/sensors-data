@@ -2,10 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { destroyChart, renderChart, updateData } from "./sandbox";
 
 function RealTimeChart({ value, range, sendSensorData, id, active }) {
-  const interval = 6000;
   const speed = 100;
   const timeoutRef = useRef(null);
-  const realValue = useRef({ x: 0, y: 0, x: 0 });
+  const realValue = useRef({ x: 0, y: 0, z: 0 });
   const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
@@ -20,7 +19,7 @@ function RealTimeChart({ value, range, sendSensorData, id, active }) {
     return () => {
       clearTimeout(timeoutRef.current);
     };
-  }, [refresh, active]);
+  }, [refresh, active, id]);
 
   useEffect(() => {
     realValue.current = value;
@@ -30,6 +29,7 @@ function RealTimeChart({ value, range, sendSensorData, id, active }) {
     renderChart(id, range);
 
     return () => destroyChart(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

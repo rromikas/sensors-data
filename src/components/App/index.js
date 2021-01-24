@@ -52,7 +52,7 @@ const App = ({
     } else {
       history.push("/");
     }
-  }, []);
+  }, [history]);
 
   useEffect(() => {
     watchLocationButton.current.click();

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import ReactMapboxGl, { Marker } from "react-mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { withTheme } from "styled-components";
@@ -33,7 +33,7 @@ const Component = ({ onReady, theme, userLocation }) => {
     if (!getCookie("secure-sensors-cookie")) {
       history.push("/");
     }
-  }, []);
+  }, [history]);
   return (
     <Map
       onStyleLoad={onReady}

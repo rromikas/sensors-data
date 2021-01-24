@@ -2,7 +2,6 @@ import React from "react";
 import RealTimeChart from "./Chart";
 import Figure from "./Figure";
 import styled from "styled-components";
-import { Row, Col } from "styled-bootstrap-grid";
 
 const Title = styled.div`
   font-weight: bold;

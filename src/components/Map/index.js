@@ -36,9 +36,10 @@ const Component = ({ onReady, theme }) => {
     }
 
     function onLocationError(er) {
-      alert(
-        "You previuosly denied permission tou see you geolocation. You can change this permission in browser settings"
-      );
+      alert("get location error", er);
+      // alert(
+      //   "You previuosly denied permission tou see you geolocation. You can change this permission in browser settings"
+      // );
     }
     let watchId;
     if (!navigator.geolocation) {

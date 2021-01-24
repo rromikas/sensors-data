@@ -2,6 +2,28 @@ import React, { useEffect, useState } from "react";
 import Sensor from "../Sensor";
 import { SendSensorData } from "api";
 import { Container, Row, Col } from "styled-bootstrap-grid";
+import styled from "styled-components";
+
+const Button = styled.button`
+  max-width: 270px;
+  width: 100%;
+  height: 40px;
+  font-size: 18px;
+  font-weight: 600;
+  background: ${(props) => props.theme.main};
+  color: ${(props) => props.theme.secondary};
+  cursor: pointer;
+  border-radius: 34px;
+  outline: 0;
+  border: none;
+  transition: background 0.2s;
+  &:hover {
+    background: #052833;
+  }
+  &:active {
+    background: #041b23;
+  }
+`;
 
 const SensorsPanel = ({ graphView }) => {
   const [showGraphs, setShowGraphs] = useState(true);
@@ -13,6 +35,7 @@ const SensorsPanel = ({ graphView }) => {
     z: 0,
   });
   const [rotationRate, setRotationRate] = useState({ alpha: 0, beta: 0, gamma: 0 });
+  const [sensorsOn, setSensorsOn] = useState(false);
 
   useEffect(() => {
     const onDeviceMotion = (e) => {
@@ -44,41 +67,42 @@ const SensorsPanel = ({ graphView }) => {
         Object.assign({}, prev, { alpha: e.alpha || 0, beta: e.beta || 0, gamma: e.gamma || 0 })
       );
     };
-
-    var ua = navigator.userAgent.toLowerCase();
-    if (ua.indexOf("safari") != -1) {
-      if (ua.indexOf("chrome") > -1) {
-        window.addEventListener("devicemotion", onDeviceMotion);
-        window.addEventListener("deviceorientation", onDeviceOrientation);
-      } else {
-        alert("browser is safari");
-        if (
-          typeof DeviceMotionEvent !== "undefined" &&
-          typeof DeviceMotionEvent.requestPermission === "function"
-        ) {
-          DeviceMotionEvent.requestPermission()
-            .then((response) => {
-              if (response == "granted") {
-                window.addEventListener("devicemotion", onDeviceMotion);
-              }
-            })
-            .catch(console.error);
+    if (sensorsOn) {
+      var ua = navigator.userAgent.toLowerCase();
+      if (ua.indexOf("safari") != -1) {
+        if (ua.indexOf("chrome") > -1) {
+          window.addEventListener("devicemotion", onDeviceMotion);
+          window.addEventListener("deviceorientation", onDeviceOrientation);
         } else {
-          alert("DeviceMotionEvent is not defined");
-        }
-        if (
-          typeof DeviceOrientationEvent !== "undefined" &&
-          typeof DeviceOrientationEvent.requestPermission === "function"
-        ) {
-          DeviceOrientationEvent.requestPermission()
-            .then((response) => {
-              if (response == "granted") {
-                window.addEventListener("deviceorientation", onDeviceOrientation);
-              }
-            })
-            .catch(console.error);
-        } else {
-          alert("DeviceOrientationEvent is not defined");
+          alert("browser is safari");
+          if (
+            typeof DeviceMotionEvent !== "undefined" &&
+            typeof DeviceMotionEvent.requestPermission === "function"
+          ) {
+            DeviceMotionEvent.requestPermission()
+              .then((response) => {
+                if (response == "granted") {
+                  window.addEventListener("devicemotion", onDeviceMotion);
+                }
+              })
+              .catch(console.error);
+          } else {
+            alert("DeviceMotionEvent is not defined");
+          }
+          if (
+            typeof DeviceOrientationEvent !== "undefined" &&
+            typeof DeviceOrientationEvent.requestPermission === "function"
+          ) {
+            DeviceOrientationEvent.requestPermission()
+              .then((response) => {
+                if (response == "granted") {
+                  window.addEventListener("deviceorientation", onDeviceOrientation);
+                }
+              })
+              .catch(console.error);
+          } else {
+            alert("DeviceOrientationEvent is not defined");
+          }
         }
       }
     }
@@ -87,10 +111,16 @@ const SensorsPanel = ({ graphView }) => {
       window.removeEventListener("devicemotion", onDeviceMotion);
       window.removeEventListener("deviceorientation", onDeviceOrientation);
     };
-  }, []);
+  }, [sensorsOn]);
 
   return (
     <Container style={{ width: "100%", maxWidth: 1000, padding: "10px 0 50px 0" }}>
+      <div style={{ padding: "1rem 1.5rem 0rem 1.5rem" }}>
+        <Button onClick={() => setSensorsOn(!sensorsOn)}>
+          {sensorsOn ? "Turn sensors off" : "Turn sensors on"}
+        </Button>
+      </div>
+
       <Row style={{ marginLeft: 0, marginRight: 0 }}>
         <Col col={12} md={6} style={{ paddingLeft: 0, paddingRight: 0 }}>
           <Sensor

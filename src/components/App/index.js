@@ -29,6 +29,8 @@ const ViewSwitcher = styled.div`
   align-items: center;
   justify-content: center;
   cursor: pointer;
+
+  console
 `;
 
 const App = ({ theme }) => {

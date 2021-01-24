@@ -45,16 +45,48 @@ const SensorsPanel = ({ graphView }) => {
       );
     };
 
-    if (showGraphs) {
-      window.addEventListener("devicemotion", onDeviceMotion);
-      window.addEventListener("deviceorientation", onDeviceOrientation);
+    var ua = navigator.userAgent.toLowerCase();
+    if (ua.indexOf("safari") != -1) {
+      if (ua.indexOf("chrome") > -1) {
+        window.addEventListener("devicemotion", onDeviceMotion);
+        window.addEventListener("deviceorientation", onDeviceOrientation);
+      } else {
+        if (
+          typeof DeviceMotionEvent !== "undefined" &&
+          typeof DeviceMotionEvent.requestPermission === "function"
+        ) {
+          DeviceMotionEvent.requestPermission()
+            .then((response) => {
+              if (response == "granted") {
+                window.addEventListener("devicemotion", onDeviceMotion);
+              }
+            })
+            .catch(console.error);
+        } else {
+          alert("DeviceMotionEvent is not defined");
+        }
+        if (
+          typeof DeviceOrientationEvent !== "undefined" &&
+          typeof DeviceOrientationEvent.requestPermission === "function"
+        ) {
+          DeviceOrientationEvent.requestPermission()
+            .then((response) => {
+              if (response == "granted") {
+                window.addEventListener("deviceorientation", onDeviceOrientation);
+              }
+            })
+            .catch(console.error);
+        } else {
+          alert("DeviceOrientationEvent is not defined");
+        }
+      }
     }
 
     return () => {
       window.removeEventListener("devicemotion", onDeviceMotion);
       window.removeEventListener("deviceorientation", onDeviceOrientation);
     };
-  }, [showGraphs]);
+  }, []);
 
   return (
     <Container style={{ width: "100%", maxWidth: 1000, padding: "10px 0 50px 0" }}>

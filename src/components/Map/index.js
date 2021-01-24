@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import ReactMapboxGl, { Marker } from "react-mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { withTheme } from "styled-components";
+import { getCookie } from "helpers";
+import { useHistory } from "react-router-dom";
 
 const Map = ReactMapboxGl({
   accessToken:
@@ -26,6 +28,12 @@ const UserMarker = ({ color }) => {
 };
 
 const Component = ({ onReady, theme, userLocation }) => {
+  const history = useHistory();
+  useEffect(() => {
+    if (!getCookie("secure-sensors-cookie")) {
+      history.push("/");
+    }
+  }, []);
   return (
     <Map
       onStyleLoad={onReady}

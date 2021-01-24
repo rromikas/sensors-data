@@ -98,10 +98,10 @@ const SensorsPanel = ({ graphView }) => {
         <Col col={12} md={6} style={{ paddingLeft: 0, paddingRight: 0 }}>
           <Sensor
             graphView={graphView}
-            id="rotationRate"
+            id="gyroscope"
             sendSensorData={SendSensorData}
             range={[-220, 220]}
-            subject="Rotation rate"
+            subject="Gyroscope"
             value={{ x: rotationRate.beta, y: rotationRate.gamma, z: rotationRate.alpha }}
           ></Sensor>
         </Col>

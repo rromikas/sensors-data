@@ -91,7 +91,7 @@ const SensorsPanel = ({ graphView }) => {
                   window.addEventListener("devicemotion", onDeviceMotion);
                 }
               })
-              .catch(alert("permission request error"));
+              .catch((er) => alert("permission request error " + er.message));
           } else {
             alert("DeviceMotionEvent is not defined");
           }
@@ -106,7 +106,7 @@ const SensorsPanel = ({ graphView }) => {
                   window.addEventListener("deviceorientation", onDeviceOrientation);
                 }
               })
-              .catch(alert("permission request error"));
+              .catch((er) => alert("permission request error " + er.message));
           } else {
             alert("DeviceOrientationEvent is not defined");
           }

@@ -74,7 +74,12 @@ const SensorsPanel = ({ graphView }) => {
           window.addEventListener("devicemotion", onDeviceMotion);
           window.addEventListener("deviceorientation", onDeviceOrientation);
         } else {
-          alert("browser is safari");
+          alert(
+            "browser is safari, typeof DeviceMotionEvent is " +
+              typeof DeviceMotionEvent +
+              ", typeof DeviceOrientationEvent is " +
+              typeof DeviceOrientationEvent
+          );
           if (
             typeof DeviceMotionEvent !== "undefined" &&
             typeof DeviceMotionEvent.requestPermission === "function"

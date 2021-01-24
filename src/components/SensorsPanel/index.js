@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Sensor from "../Sensor";
 import { SendSensorData } from "api";
 import { Container, Row, Col } from "styled-bootstrap-grid";
@@ -37,95 +37,101 @@ const SensorsPanel = ({ graphView }) => {
   const [rotationRate, setRotationRate] = useState({ alpha: 0, beta: 0, gamma: 0 });
   const [sensorsOn, setSensorsOn] = useState(false);
 
-  useEffect(() => {
-    const onDeviceMotion = (e) => {
-      setAcceleration((prev) =>
-        Object.assign({}, prev, {
-          x: e.acceleration.x || 0,
-          y: e.acceleration.y || 0,
-          z: e.acceleration.z || 0,
-        })
-      );
-      setAccelerationIncludingGravity((prev) =>
-        Object.assign({}, prev, {
-          x: e.accelerationIncludingGravity.x || 0,
-          y: e.accelerationIncludingGravity.y || 0,
-          z: e.accelerationIncludingGravity.z || 0,
-        })
-      );
-      setRotationRate((prev) =>
-        Object.assign({}, prev, {
-          alpha: e.rotationRate.alpha || 0,
-          beta: e.rotationRate.beta || 0,
-          gamma: e.rotationRate.gamma || 0,
-        })
-      );
-    };
+  const onDeviceMotion = useCallback((e) => {
+    setAcceleration((prev) =>
+      Object.assign({}, prev, {
+        x: e.acceleration.x || 0,
+        y: e.acceleration.y || 0,
+        z: e.acceleration.z || 0,
+      })
+    );
+    setAccelerationIncludingGravity((prev) =>
+      Object.assign({}, prev, {
+        x: e.accelerationIncludingGravity.x || 0,
+        y: e.accelerationIncludingGravity.y || 0,
+        z: e.accelerationIncludingGravity.z || 0,
+      })
+    );
+    setRotationRate((prev) =>
+      Object.assign({}, prev, {
+        alpha: e.rotationRate.alpha || 0,
+        beta: e.rotationRate.beta || 0,
+        gamma: e.rotationRate.gamma || 0,
+      })
+    );
+  }, []);
 
-    const onDeviceOrientation = (e) => {
-      setOrientation((prev) =>
-        Object.assign({}, prev, { alpha: e.alpha || 0, beta: e.beta || 0, gamma: e.gamma || 0 })
-      );
-    };
-    if (sensorsOn) {
-      var ua = navigator.userAgent.toLowerCase();
-      if (ua.indexOf("safari") != -1) {
-        if (ua.indexOf("chrome") > -1) {
-          window.addEventListener("devicemotion", onDeviceMotion);
-          window.addEventListener("deviceorientation", onDeviceOrientation);
+  const onDeviceOrientation = useCallback((e) => {
+    setOrientation((prev) =>
+      Object.assign({}, prev, { alpha: e.alpha || 0, beta: e.beta || 0, gamma: e.gamma || 0 })
+    );
+  }, []);
+
+  const TurnSensorsOn = () => {
+    var ua = navigator.userAgent.toLowerCase();
+    if (ua.indexOf("safari") != -1) {
+      if (ua.indexOf("chrome") > -1) {
+        window.addEventListener("devicemotion", onDeviceMotion);
+        window.addEventListener("deviceorientation", onDeviceOrientation);
+      } else {
+        alert(
+          "browser is safari, typeof DeviceMotionEvent is " +
+            typeof DeviceMotionEvent +
+            ", typeof DeviceOrientationEvent is " +
+            typeof DeviceOrientationEvent
+        );
+        if (
+          typeof DeviceMotionEvent !== "undefined" &&
+          typeof DeviceMotionEvent.requestPermission === "function"
+        ) {
+          DeviceMotionEvent.requestPermission()
+            .then((response) => {
+              alert("permission response " + response);
+              if (response == "granted") {
+                window.addEventListener("devicemotion", onDeviceMotion);
+              }
+            })
+            .catch((er) => alert("permission request error " + er.message));
         } else {
-          alert(
-            "browser is safari, typeof DeviceMotionEvent is " +
-              typeof DeviceMotionEvent +
-              ", typeof DeviceOrientationEvent is " +
-              typeof DeviceOrientationEvent
-          );
-          if (
-            typeof DeviceMotionEvent !== "undefined" &&
-            typeof DeviceMotionEvent.requestPermission === "function"
-          ) {
-            DeviceMotionEvent.requestPermission()
-              .then((response) => {
-                alert("permission response " + response);
-                if (response == "granted") {
-                  window.addEventListener("devicemotion", onDeviceMotion);
-                }
-              })
-              .catch((er) => alert("permission request error " + er.message));
-          } else {
-            alert("DeviceMotionEvent is not defined");
-          }
-          if (
-            typeof DeviceOrientationEvent !== "undefined" &&
-            typeof DeviceOrientationEvent.requestPermission === "function"
-          ) {
-            DeviceOrientationEvent.requestPermission()
-              .then((response) => {
-                alert("permission response " + response);
-                if (response == "granted") {
-                  window.addEventListener("deviceorientation", onDeviceOrientation);
-                }
-              })
-              .catch((er) => alert("permission request error " + er.message));
-          } else {
-            alert("DeviceOrientationEvent is not defined");
-          }
+          alert("DeviceMotionEvent is not defined");
+        }
+        if (
+          typeof DeviceOrientationEvent !== "undefined" &&
+          typeof DeviceOrientationEvent.requestPermission === "function"
+        ) {
+          DeviceOrientationEvent.requestPermission()
+            .then((response) => {
+              alert("permission response " + response);
+              if (response == "granted") {
+                window.addEventListener("deviceorientation", onDeviceOrientation);
+              }
+            })
+            .catch((er) => alert("permission request error " + er.message));
+        } else {
+          alert("DeviceOrientationEvent is not defined");
         }
       }
     }
+    setSensorsOn(true);
+  };
 
-    return () => {
-      window.removeEventListener("devicemotion", onDeviceMotion);
-      window.removeEventListener("deviceorientation", onDeviceOrientation);
-    };
-  }, [sensorsOn]);
+  const TurnSensorsOff = () => {
+    console.log("Asdasd");
+    window.removeEventListener("deviceorientation", onDeviceOrientation);
+    window.removeEventListener("devicemotion", onDeviceMotion);
+    setSensorsOn(false);
+  };
 
   return (
     <Container style={{ width: "100%", maxWidth: 1000, padding: "10px 0 50px 0" }}>
       <div style={{ padding: "1rem 1.5rem 0rem 1.5rem" }}>
-        <Button onClick={() => setSensorsOn(!sensorsOn)}>
-          {sensorsOn ? "Turn sensors off" : "Turn sensors on"}
-        </Button>
+        {sensorsOn ? (
+          <Button onClick={TurnSensorsOff}>Turn sensors off</Button>
+        ) : (
+          <Button id="request" onClick={TurnSensorsOn}>
+            Turn sensors on
+          </Button>
+        )}
       </div>
 
       <Row style={{ marginLeft: 0, marginRight: 0 }}>

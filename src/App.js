@@ -24,7 +24,6 @@ const StartWatchingGeolocation = (setUserLocation) => {
   function onLocationError(er) {
     alert("No access to user location: " + er.message);
   }
-  let watchId;
   if (!navigator.geolocation) {
     alert("Browser doesn't support geolocation detector");
   } else {

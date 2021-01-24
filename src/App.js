@@ -1,9 +1,12 @@
-import React, { Suspense, useState, useRef } from "react";
+import React, { Suspense, useState, useRef, useEffect } from "react";
 import RequestEmailForm from "components/RequestEmailForm";
 import Loader from "components/Loader";
 import { ThemeProvider } from "styled-components";
 import { Route, Switch } from "react-router-dom";
 import { BaseCSS } from "styled-bootstrap-grid";
+import { getCookie } from "helpers";
+import { useHistory } from "react-router-dom";
+
 const MainApp = React.lazy(() => import("components/App"));
 
 const theme = {
@@ -44,7 +47,14 @@ const StopWatchingLocation = () => {
 const App = () => {
   const [userLocation, setUserLocation] = useState([54.91284224031921, 54.91284224031921]);
   const [watchLocation, setWatchLocation] = useState(false);
-  const watchId = useRef(null);
+
+  const history = useHistory();
+
+  useEffect(() => {
+    if (getCookie("secure-sensors-cookie")) {
+      history.push("/app/" + Date.now());
+    }
+  }, []);
   return (
     <ThemeProvider theme={theme}>
       <BaseCSS></BaseCSS>

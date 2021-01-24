@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { destroyChart, renderChart, updateData } from "./sandbox";
 
-function Chart({ value, range, sendSensorData, id }) {
+function RealTimeChart({ value, range, sendSensorData, id, active }) {
   const interval = 6000;
   const speed = 100;
   const timeoutRef = useRef(null);
@@ -9,15 +9,18 @@ function Chart({ value, range, sendSensorData, id }) {
   const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => {
-      timeoutRef.current = null;
-      updateData(id, realValue.current);
-      setRefresh(!refresh);
-      //sendSensorData(realValue.current);
-    }, speed);
+    if (active) {
+      timeoutRef.current = setTimeout(() => {
+        updateData(id, realValue.current);
+        setRefresh(!refresh);
+        //sendSensorData(realValue.current);
+      }, speed);
+    }
 
-    return clearTimeout(timeoutRef.current);
-  }, [refresh]);
+    return () => {
+      clearTimeout(timeoutRef.current);
+    };
+  }, [refresh, active]);
 
   useEffect(() => {
     realValue.current = value;
@@ -36,4 +39,4 @@ function Chart({ value, range, sendSensorData, id }) {
   );
 }
 
-export default Chart;
+export default RealTimeChart;

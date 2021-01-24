@@ -25,6 +25,7 @@ const Sensor = ({
   id,
   graphView,
   labels = ["X-axis", "Y-axis", "Z-axis"],
+  active,
 }) => {
   return (
     <div
@@ -61,6 +62,7 @@ const Sensor = ({
           value={value}
           range={range}
           subject={subject}
+          active={active}
         ></RealTimeChart>
       ) : (
         <Figure value={value} labels={labels} units={units}></Figure>

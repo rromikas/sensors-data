@@ -26,7 +26,6 @@ const Button = styled.button`
 `;
 
 const SensorsPanel = ({ graphView }) => {
-  const [showGraphs, setShowGraphs] = useState(true);
   const [orientation, setOrientation] = useState({ alpha: 0, beta: 0, gamma: 0 });
   const [acceleration, setAcceleration] = useState({ x: 0, y: 0, z: 0 });
   const [accelerationIncludingGravity, setAccelerationIncludingGravity] = useState({
@@ -128,6 +127,7 @@ const SensorsPanel = ({ graphView }) => {
       <Row style={{ marginLeft: 0, marginRight: 0 }}>
         <Col col={12} md={6} style={{ paddingLeft: 0, paddingRight: 0 }}>
           <Sensor
+            active={sensorsOn}
             labels={["X-axis (β)", "Y-axis (γ)", "Z-axis (α)"]}
             graphView={graphView}
             id="orientation"
@@ -140,6 +140,7 @@ const SensorsPanel = ({ graphView }) => {
         </Col>
         <Col col={12} md={6} style={{ paddingLeft: 0, paddingRight: 0 }}>
           <Sensor
+            active={sensorsOn}
             graphView={graphView}
             id="accelerometer"
             sendSensorData={SendSensorData}
@@ -153,6 +154,7 @@ const SensorsPanel = ({ graphView }) => {
       <Row style={{ marginLeft: 0, marginRight: 0 }}>
         <Col col={12} md={6} style={{ paddingLeft: 0, paddingRight: 0 }}>
           <Sensor
+            active={sensorsOn}
             graphView={graphView}
             id="accelerometerIncludingGravity"
             sendSensorData={SendSensorData}
@@ -164,6 +166,7 @@ const SensorsPanel = ({ graphView }) => {
         </Col>
         <Col col={12} md={6} style={{ paddingLeft: 0, paddingRight: 0 }}>
           <Sensor
+            active={sensorsOn}
             graphView={graphView}
             id="gyroscope"
             sendSensorData={SendSensorData}

@@ -86,7 +86,7 @@ const SensorsPanel = ({ graphView }) => {
           ) {
             DeviceMotionEvent.requestPermission()
               .then((response) => {
-                alert("permission response", response);
+                alert("permission response" + response);
                 if (response == "granted") {
                   window.addEventListener("devicemotion", onDeviceMotion);
                 }
@@ -101,7 +101,7 @@ const SensorsPanel = ({ graphView }) => {
           ) {
             DeviceOrientationEvent.requestPermission()
               .then((response) => {
-                alert("permission response", response);
+                alert("permission response " + response);
                 if (response == "granted") {
                   window.addEventListener("deviceorientation", onDeviceOrientation);
                 }

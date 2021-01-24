@@ -25,38 +25,7 @@ const UserMarker = ({ color }) => {
   );
 };
 
-const Component = ({ onReady, theme }) => {
-  const [userLocation, setUserLocation] = useState([54.91284224031921, 54.91284224031921]);
-
-  useEffect(() => {
-    function onLocationSuccess(position, setUserLocation) {
-      const latitude = position.coords.latitude;
-      const longitude = position.coords.longitude;
-      setUserLocation([longitude, latitude]);
-    }
-
-    function onLocationError(er) {
-      alert("No access to user location: " + er.message);
-    }
-    let watchId;
-    if (!navigator.geolocation) {
-      alert("Browser doesn't support geolocation detector");
-    } else {
-      watchId = navigator.geolocation.watchPosition(
-        (position) => onLocationSuccess(position, setUserLocation),
-        onLocationError,
-        {
-          enableHighAccuracy: true,
-        }
-      );
-    }
-    return () => {
-      if (watchId) {
-        navigator.geolocation.clearWatch(watchId);
-      }
-    };
-  }, []);
-
+const Component = ({ onReady, theme, userLocation }) => {
   return (
     <Map
       onStyleLoad={onReady}

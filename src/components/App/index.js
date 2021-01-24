@@ -5,6 +5,7 @@ import styled, { withTheme } from "styled-components";
 import { getCookie } from "helpers";
 import { useHistory } from "react-router-dom";
 import GraphIcon from "images/Graph";
+import Cursor from "images/Cursor";
 
 const Navbar = styled.div`
   position: fixed;
@@ -19,21 +20,26 @@ const Navbar = styled.div`
   background: linear-gradient(0deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 74%);
 `;
 
-const ViewSwitcher = styled.div`
+const SwitchButton = styled.div`
   height: 33px;
   width: 48px;
   border-radius: 5px;
   border: 1px solid ${(props) => props.theme.main};
-  background: ${(props) => (props.graphView ? props.theme.main : "white")};
+  background: ${(props) => (props.active ? props.theme.main : "white")};
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-
-  console
+  margin-bottom: 5px;
 `;
 
-const App = ({ theme }) => {
+const App = ({
+  theme,
+  userLocation,
+  watchLocation,
+  startWatchingLocation,
+  stopWatchingLocation,
+}) => {
   const [email, setEmail] = useState("");
   const [graphView, setGraphView] = useState(false);
   const history = useHistory();
@@ -62,12 +68,20 @@ const App = ({ theme }) => {
           <div>Welcome,</div>
           <div>{email.split("@")[0]}</div>
         </div>
-        <ViewSwitcher graphView={graphView} onClick={() => setGraphView(!graphView)}>
-          <GraphIcon color={graphView ? theme.secondary : theme.primary}></GraphIcon>
-        </ViewSwitcher>
+        <div>
+          <SwitchButton active={graphView} onClick={() => setGraphView(!graphView)}>
+            <GraphIcon color={graphView ? theme.secondary : theme.main}></GraphIcon>
+          </SwitchButton>
+          <SwitchButton
+            active={watchLocation}
+            onClick={watchLocation ? stopWatchingLocation : startWatchingLocation}
+          >
+            <Cursor color={watchLocation ? theme.secondary : theme.main}></Cursor>
+          </SwitchButton>
+        </div>
       </Navbar>
       <div style={{ height: "70%", maxHeight: 679 }}>
-        <Map></Map>
+        <Map userLocation={userLocation}></Map>
       </div>
       <Sensors graphView={graphView}></Sensors>
     </div>

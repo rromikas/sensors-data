@@ -74,24 +74,17 @@ const SensorsPanel = ({ graphView }) => {
         window.addEventListener("devicemotion", onDeviceMotion);
         window.addEventListener("deviceorientation", onDeviceOrientation);
       } else {
-        alert(
-          "browser is safari, typeof DeviceMotionEvent is " +
-            typeof DeviceMotionEvent +
-            ", typeof DeviceOrientationEvent is " +
-            typeof DeviceOrientationEvent
-        );
         if (
           typeof DeviceMotionEvent !== "undefined" &&
           typeof DeviceMotionEvent.requestPermission === "function"
         ) {
           DeviceMotionEvent.requestPermission()
             .then((response) => {
-              alert("permission response " + response);
               if (response == "granted") {
                 window.addEventListener("devicemotion", onDeviceMotion);
               }
             })
-            .catch((er) => alert("permission request error " + er.message));
+            .catch((er) => console.log("Request permission error", er));
         } else {
           alert("DeviceMotionEvent is not defined");
         }
@@ -101,12 +94,11 @@ const SensorsPanel = ({ graphView }) => {
         ) {
           DeviceOrientationEvent.requestPermission()
             .then((response) => {
-              alert("permission response " + response);
               if (response == "granted") {
                 window.addEventListener("deviceorientation", onDeviceOrientation);
               }
             })
-            .catch((er) => alert("permission request error " + er.message));
+            .catch((er) => console.log("Request permission error", er));
         } else {
           alert("DeviceOrientationEvent is not defined");
         }
@@ -116,7 +108,6 @@ const SensorsPanel = ({ graphView }) => {
   };
 
   const TurnSensorsOff = () => {
-    console.log("Asdasd");
     window.removeEventListener("deviceorientation", onDeviceOrientation);
     window.removeEventListener("devicemotion", onDeviceMotion);
     setSensorsOn(false);

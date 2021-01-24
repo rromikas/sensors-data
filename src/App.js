@@ -45,7 +45,7 @@ const StopWatchingLocation = () => {
 };
 
 const App = () => {
-  const [userLocation, setUserLocation] = useState([46.6753, 24.7136]);
+  const [userLocation, setUserLocation] = useState([46.713001755456006, 24.819448316439964]);
   const [watchLocation, setWatchLocation] = useState(false);
 
   const history = useHistory();

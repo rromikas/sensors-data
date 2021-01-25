@@ -55,6 +55,7 @@ const App = () => {
       history.push("/app/" + Date.now());
     }
   }, [history]);
+
   return (
     <ThemeProvider theme={theme}>
       <BaseCSS></BaseCSS>

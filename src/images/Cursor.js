@@ -1,7 +1,6 @@
 import React from "react";
 
 function Icon({ color = "black" }) {
-  console.log("coolor", color);
   return (
     <svg
       width="22px"

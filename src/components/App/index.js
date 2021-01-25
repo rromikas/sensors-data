@@ -59,7 +59,7 @@ const App = ({
   }, []);
 
   return (
-    <div style={{ height: "100%" }}>
+    <div>
       <Navbar>
         <div
           style={{
@@ -86,7 +86,7 @@ const App = ({
           </SwitchButton>
         </div>
       </Navbar>
-      <div style={{ height: "70%", maxHeight: 679 }}>
+      <div style={{ height: "70vh", maxHeight: 679 }}>
         <Map userLocation={userLocation}></Map>
       </div>
       <Sensors graphView={graphView}></Sensors>

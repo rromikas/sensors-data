@@ -1,11 +1,13 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Suspense } from "react";
 import Sensors from "components/SensorsPanel";
-import Map from "components/Map";
 import styled, { withTheme } from "styled-components";
 import { getCookie } from "helpers";
-import { useHistory } from "react-router-dom";
 import GraphIcon from "images/Graph";
 import Cursor from "images/Cursor";
+import RequestEmailForm from "components/RequestEmailForm";
+import Loader from "components/Loader";
+import { Flipper } from "react-flip-toolkit";
+const Map = React.lazy(() => import("components/Map"));
 
 const Navbar = styled.div`
   position: fixed;
@@ -40,22 +42,15 @@ const App = ({
   startWatchingLocation,
   stopWatchingLocation,
 }) => {
-  const [email, setEmail] = useState("");
   const [graphView, setGraphView] = useState(false);
-  const history = useHistory();
   const watchLocationButton = useRef(null);
-
-  useEffect(() => {
-    let cookie = getCookie("secure-sensors-cookie");
-    if (cookie) {
-      setEmail(cookie);
-    } else {
-      history.push("/");
-    }
-  }, [history]);
+  const [pageRendered, setPageRendered] = useState(false);
+  const [cookie, setCookie] = useState(getCookie("secure-sensors-cookie"));
+  const [sensorsOn, setSensorsOn] = useState(false);
 
   useEffect(() => {
     watchLocationButton.current.click();
+    setPageRendered(true);
   }, []);
 
   return (
@@ -71,7 +66,7 @@ const App = ({
           }}
         >
           <div>Welcome,</div>
-          <div>{email.split("@")[0]}</div>
+          <div>{cookie ? cookie.split("@")[0] : ""}</div>
         </div>
         <div>
           <SwitchButton active={graphView} onClick={() => setGraphView(!graphView)}>
@@ -84,12 +79,20 @@ const App = ({
           >
             <Cursor color={watchLocation ? theme.secondary : theme.main}></Cursor>
           </SwitchButton>
+          <div id="sensors-button"></div>
         </div>
       </Navbar>
+      <Flipper flipKey={cookie}>
+        {!cookie && <RequestEmailForm setCookie={setCookie}></RequestEmailForm>}
+      </Flipper>
       <div style={{ height: "70vh", maxHeight: 679 }}>
-        <Map userLocation={userLocation}></Map>
+        {pageRendered && (
+          <Suspense fallback={<Loader></Loader>}>
+            <Map userLocation={userLocation} />
+          </Suspense>
+        )}
       </div>
-      <Sensors graphView={graphView}></Sensors>
+      <Sensors graphView={graphView} sensorsOn={sensorsOn} setSensorsOn={setSensorsOn}></Sensors>
     </div>
   );
 };

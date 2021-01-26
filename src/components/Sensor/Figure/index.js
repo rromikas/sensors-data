@@ -1,14 +1,15 @@
 import React from "react";
 import styled, { withTheme } from "styled-components";
 
+const Label = styled.div`
+  margin-right: 4px;
+  font-weight: 600;
+  white-space: nowrap;
+`;
+
 const Figure = ({ value, labels, units, theme }) => {
   const { x, y, z } = value;
 
-  const Label = styled.div`
-    margin-right: 4px;
-    font-weight: 600;
-    white-space: nowrap;
-  `;
   return (
     <div style={{ color: theme.main }}>
       <div style={{ maxWidth: "100px", width: "100%" }}>

@@ -1,31 +1,57 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useRef, useEffect } from "react";
+import ReactDOM from "react-dom";
 import Sensor from "../Sensor";
 import { SendSensorData } from "api";
 import { Container, Row, Col } from "styled-bootstrap-grid";
-import styled from "styled-components";
+import styled, { withTheme } from "styled-components";
+import SensorIcon from "images/Sensor";
+import { onDeviceMotion } from "sensors/deviceMotion";
+import { onDeviceOrientation } from "sensors/deviceOrientation";
 
-const Button = styled.button`
-  max-width: 270px;
-  width: 100%;
-  height: 40px;
-  font-size: 18px;
-  font-weight: 600;
-  background: ${(props) => props.theme.main};
-  color: ${(props) => props.theme.secondary};
+const SwitchButton = styled.div`
+  height: 33px;
+  width: 48px;
+  border-radius: 5px;
+  border: 1px solid ${(props) => props.theme.main};
+  background: ${(props) =>
+    props.active ? (props.theme.main ? props.theme.main : "black") : "white"};
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  border-radius: 34px;
-  outline: 0;
-  border: none;
-  transition: background 0.2s;
-  &:hover {
-    background: #052833;
-  }
-  &:active {
-    background: #041b23;
-  }
+  margin-bottom: 5px;
 `;
 
-const SensorsPanel = ({ graphView }) => {
+const SensorsButton = ({
+  sensorsOn,
+  TurnSensorsOn,
+  TurnSensorsOff,
+  theme,
+  sensorsButtonRenderedOnce,
+  setSensorsButtonRenderedOnce,
+}) => {
+  const TurnOnOffButtonRef = useRef();
+  useEffect(() => {
+    if (!sensorsButtonRenderedOnce) {
+      TurnOnOffButtonRef.current.click();
+      setSensorsButtonRenderedOnce(true);
+    }
+  }, []);
+  return (
+    <SwitchButton
+      theme={theme}
+      ref={TurnOnOffButtonRef}
+      active={sensorsOn}
+      onClick={() => {
+        sensorsOn ? TurnSensorsOff() : TurnSensorsOn();
+      }}
+    >
+      <SensorIcon color={sensorsOn ? theme.secondary : theme.main}></SensorIcon>
+    </SwitchButton>
+  );
+};
+
+const SensorsPanel = ({ graphView, sensorsOn, setSensorsOn, theme }) => {
   const [orientation, setOrientation] = useState({ alpha: 0, beta: 0, gamma: 0 });
   const [acceleration, setAcceleration] = useState({ x: 0, y: 0, z: 0 });
   const [accelerationIncludingGravity, setAccelerationIncludingGravity] = useState({
@@ -34,44 +60,28 @@ const SensorsPanel = ({ graphView }) => {
     z: 0,
   });
   const [rotationRate, setRotationRate] = useState({ alpha: 0, beta: 0, gamma: 0 });
-  const [sensorsOn, setSensorsOn] = useState(false);
+  const [sensorsButtonRenderedOnce, setSensorsButtonRenderedOnce] = useState(false);
 
-  const onDeviceMotion = useCallback((e) => {
-    setAcceleration((prev) =>
-      Object.assign({}, prev, {
-        x: e.acceleration.x || 0,
-        y: e.acceleration.y || 0,
-        z: e.acceleration.z || 0,
-      })
-    );
-    setAccelerationIncludingGravity((prev) =>
-      Object.assign({}, prev, {
-        x: e.accelerationIncludingGravity.x || 0,
-        y: e.accelerationIncludingGravity.y || 0,
-        z: e.accelerationIncludingGravity.z || 0,
-      })
-    );
-    setRotationRate((prev) =>
-      Object.assign({}, prev, {
-        alpha: e.rotationRate.alpha || 0,
-        beta: e.rotationRate.beta || 0,
-        gamma: e.rotationRate.gamma || 0,
-      })
-    );
-  }, []);
+  const onDeviceMotionAssigned = useCallback(
+    (e) => {
+      onDeviceMotion(e, { setAcceleration, setAccelerationIncludingGravity, setRotationRate });
+    },
+    [onDeviceMotion]
+  );
 
-  const onDeviceOrientation = useCallback((e) => {
-    setOrientation((prev) =>
-      Object.assign({}, prev, { alpha: e.alpha || 0, beta: e.beta || 0, gamma: e.gamma || 0 })
-    );
-  }, []);
+  const onDeviceOrientationAssigned = useCallback(
+    (e) => {
+      onDeviceOrientation(e, { setOrientation });
+    },
+    [onDeviceOrientation]
+  );
 
-  const TurnSensorsOn = () => {
+  const TurnSensorsOn = useCallback(() => {
     var ua = navigator.userAgent.toLowerCase();
     if (ua.indexOf("safari") !== -1) {
       if (ua.indexOf("chrome") > -1) {
-        window.addEventListener("devicemotion", onDeviceMotion);
-        window.addEventListener("deviceorientation", onDeviceOrientation);
+        window.addEventListener("devicemotion", onDeviceMotionAssigned);
+        window.addEventListener("deviceorientation", onDeviceOrientationAssigned);
       } else {
         if (
           typeof DeviceMotionEvent !== "undefined" &&
@@ -80,7 +90,7 @@ const SensorsPanel = ({ graphView }) => {
           DeviceMotionEvent.requestPermission()
             .then((response) => {
               if (response === "granted") {
-                window.addEventListener("devicemotion", onDeviceMotion);
+                window.addEventListener("devicemotion", onDeviceMotionAssigned);
               }
             })
             .catch((er) => console.log("Request permission error", er));
@@ -94,7 +104,7 @@ const SensorsPanel = ({ graphView }) => {
           DeviceOrientationEvent.requestPermission()
             .then((response) => {
               if (response === "granted") {
-                window.addEventListener("deviceorientation", onDeviceOrientation);
+                window.addEventListener("deviceorientation", onDeviceOrientationAssigned);
               }
             })
             .catch((er) => console.log("Request permission error", er));
@@ -104,26 +114,32 @@ const SensorsPanel = ({ graphView }) => {
       }
     }
     setSensorsOn(true);
-  };
+  }, [onDeviceOrientationAssigned, onDeviceMotionAssigned]);
 
-  const TurnSensorsOff = () => {
-    window.removeEventListener("deviceorientation", onDeviceOrientation);
-    window.removeEventListener("devicemotion", onDeviceMotion);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+
+  const TurnSensorsOff = useCallback(() => {
+    window.removeEventListener("deviceorientation", onDeviceOrientationAssigned);
+    window.removeEventListener("devicemotion", onDeviceMotionAssigned);
     setSensorsOn(false);
-  };
+  }, [onDeviceOrientation, onDeviceMotion]);
+
+  useEffect(() => {
+    ReactDOM.render(
+      <SensorsButton
+        sensorsButtonRenderedOnce={sensorsButtonRenderedOnce}
+        setSensorsButtonRenderedOnce={setSensorsButtonRenderedOnce}
+        theme={theme}
+        sensorsOn={sensorsOn}
+        TurnSensorsOff={TurnSensorsOff}
+        TurnSensorsOn={TurnSensorsOn}
+      ></SensorsButton>,
+      document.getElementById("sensors-button")
+    );
+  }, [sensorsOn, TurnSensorsOn, TurnSensorsOff, sensorsButtonRenderedOnce, theme]);
 
   return (
     <Container style={{ width: "100%", maxWidth: 1000, padding: "10px 0 50px 0" }}>
-      <div style={{ padding: "1rem 1.5rem 0rem 1.5rem" }}>
-        {sensorsOn ? (
-          <Button onClick={TurnSensorsOff}>Turn sensors off</Button>
-        ) : (
-          <Button id="request" onClick={TurnSensorsOn}>
-            Turn sensors on
-          </Button>
-        )}
-      </div>
-
       <Row style={{ marginLeft: 0, marginRight: 0 }}>
         <Col col={12} md={6} style={{ paddingLeft: 0, paddingRight: 0 }}>
           <Sensor
@@ -180,4 +196,4 @@ const SensorsPanel = ({ graphView }) => {
   );
 };
 
-export default SensorsPanel;
+export default withTheme(SensorsPanel);

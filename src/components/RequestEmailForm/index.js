@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { GetSecureCookie } from "api";
-import { setCookie } from "helpers";
-import styled, { withTheme } from "styled-components";
-import { Flipper, Flipped, spring } from "react-flip-toolkit";
+import { setCookie as storeCookieInBrowser } from "helpers";
+import styled from "styled-components";
+import { Flipped, spring } from "react-flip-toolkit";
 
 const EmailInput = styled.input`
   color: ${(props) => props.theme.main};
@@ -41,7 +41,7 @@ const Button = styled.button`
   }
 `;
 
-const FixedContainer = styled.div`
+const FormContainer = styled.div`
   z-index: 999;
   position: fixed;
   top: 0;
@@ -63,85 +63,49 @@ const Title = styled.div`
   line-height: 40px;
   text-align: center;
   max-width: 350px;
-  color: #073b4c;
+  color: ${(props) => props.theme.main};
 `;
 
-const RequestEmailForm = ({ theme }) => {
+const RequestEmailForm = ({ setCookie }) => {
   const [email, setEmail] = useState("");
-  const [linkSent, setLinkSent] = useState(false);
 
   const onSubmit = async (e) => {
     e.preventDefault();
     GetSecureCookie(email);
-    setCookie("secure-sensors-cookie", email, 30);
-    setLinkSent(true);
+    storeCookieInBrowser("secure-sensors-cookie", email, 30);
+    setCookie(email);
   };
 
   return (
-    <Flipper
-      flipKey={linkSent}
-      handleEnterUpdateDelete={({
-        animateExitingElements,
-        animateEnteringElements,
-        hideEnteringElements,
-      }) => {
-        hideEnteringElements();
-        animateExitingElements();
-        animateEnteringElements();
+    <Flipped
+      flipId="emailForm"
+      onExit={(el, index, removeElement) => {
+        spring({
+          onUpdate: (val) => {
+            el.style.opacity = 1 - val;
+          },
+          onComplete: removeElement,
+        });
       }}
     >
-      <FixedContainer>
-        {!linkSent ? (
-          <Flipped
-            flipId="email-form"
-            onExit={(el, i, removeElement) => {
-              spring({
-                onComplete: removeElement,
-                onUpdate: (val) => {
-                  el.style.transform = `translateX(${-val * 100}%)`;
-                  el.style.opacity = 1 - val;
-                },
-              });
+      <FormContainer>
+        <form style={{ maxWidth: 400, textAlign: "center", padding: 20 }} onSubmit={onSubmit}>
+          <Title>Hello,</Title>
+          <EmailInput
+            placeholder="Enter your email"
+            required
+            type="email"
+            value={email}
+            onChange={(e) => {
+              e.persist();
+              setEmail(e.target.value);
             }}
-          >
-            <form style={{ maxWidth: 400, textAlign: "center", padding: 20 }} onSubmit={onSubmit}>
-              <Title>Hello,</Title>
-              <EmailInput
-                placeholder="Enter your email"
-                required
-                type="email"
-                value={email}
-                onChange={(e) => {
-                  e.persist();
-                  setEmail(e.target.value);
-                }}
-              ></EmailInput>
-              <Button type="submit">Get Link</Button>
-            </form>
-          </Flipped>
-        ) : (
-          <Flipped
-            flipId="confirmation"
-            onAppear={(el, i) => {
-              spring({
-                delay: 500,
-                onUpdate: (val) => {
-                  el.style.transform = `translateX(${(1 - val) * 100}%)`;
-                  el.style.opacity = val;
-                },
-              });
-            }}
-          >
-            <div style={{ padding: 20, color: theme.main, textAlign: "center" }}>
-              <Title>Your link has been sent to</Title>
-              <div style={{ textAlign: "center", fontSize: 35 }}>{email}</div>
-              <a href={`/app/${Date.now()}`}>Overview app</a>
-            </div>
-          </Flipped>
-        )}
-      </FixedContainer>
-    </Flipper>
+          ></EmailInput>
+          <Button type="submit">Enter app</Button>
+        </form>
+      </FormContainer>
+    </Flipped>
   );
 };
 
-export default withTheme(RequestEmailForm);
+export default RequestEmailForm;

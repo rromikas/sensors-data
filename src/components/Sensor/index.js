@@ -29,6 +29,7 @@ const markStyle = (color) => {
 const Sensor = ({
   value,
   characterValue,
+  characterValueLabels,
   subject,
   units,
   range,
@@ -79,7 +80,14 @@ const Sensor = ({
       ) : (
         <Figure value={value} labels={labels} units={units} subject={subject}></Figure>
       )}
-      {/* <Figure value={characterValue} labels={labels} units={units} subject={subject}></Figure> */}
+      {characterValue && (
+        <Figure
+          characterValue
+          value={characterValue}
+          labels={characterValueLabels}
+          subject={subject}
+        ></Figure>
+      )}
     </div>
   );
 };

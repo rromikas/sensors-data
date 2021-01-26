@@ -71,7 +71,10 @@ const SensorsPanel = ({ graphView, sensorsOn, setSensorsOn, theme }) => {
     speed: 0,
   });
 
-  const [location, setLocaton] = useState({ country: "", city: "", state: "" });
+  const lastLocationFetchTimestamp = useRef(0);
+  const timeGapBetweenLocationFetch = 20 * 1000; // miliseconds
+
+  const [location, setLocaton] = useState({ country: "", city: "" });
 
   const [sensorsButtonRenderedOnce, setSensorsButtonRenderedOnce] = useState(false);
 
@@ -89,7 +92,7 @@ const SensorsPanel = ({ graphView, sensorsOn, setSensorsOn, theme }) => {
     [onDeviceOrientation]
   );
 
-  const TurnSensorsOn = useCallback(() => {
+  const TurnSensorsOn = useCallback(async () => {
     var ua = navigator.userAgent.toLowerCase();
     if (ua.indexOf("safari") !== -1) {
       if (ua.indexOf("chrome") > -1) {
@@ -100,13 +103,19 @@ const SensorsPanel = ({ graphView, sensorsOn, setSensorsOn, theme }) => {
           typeof DeviceMotionEvent !== "undefined" &&
           typeof DeviceMotionEvent.requestPermission === "function"
         ) {
-          DeviceMotionEvent.requestPermission()
+          let res = await DeviceMotionEvent.requestPermission()
             .then((response) => {
               if (response === "granted") {
                 window.addEventListener("devicemotion", onDeviceMotionAssigned);
+                return "sucess";
+              } else {
+                return "error";
               }
             })
-            .catch((er) => console.log("Request permission error", er));
+            .catch((er) => {
+              return er.message;
+            });
+          alert("repsonse adding device motion " + res);
         } else {
           alert("DeviceMotionEvent is not defined");
         }
@@ -114,13 +123,17 @@ const SensorsPanel = ({ graphView, sensorsOn, setSensorsOn, theme }) => {
           typeof DeviceOrientationEvent !== "undefined" &&
           typeof DeviceOrientationEvent.requestPermission === "function"
         ) {
-          DeviceOrientationEvent.requestPermission()
+          let res = await DeviceOrientationEvent.requestPermission()
             .then((response) => {
               if (response === "granted") {
                 window.addEventListener("deviceorientation", onDeviceOrientationAssigned);
+                return "success";
+              } else {
+                return "error";
               }
             })
-            .catch((er) => console.log("Request permission error", er));
+            .catch((er) => er.message);
+          alert("repsonse adding device orientation " + res);
         } else {
           alert("DeviceOrientationEvent is not defined");
         }
@@ -167,11 +180,29 @@ const SensorsPanel = ({ graphView, sensorsOn, setSensorsOn, theme }) => {
 
   useEffect(() => {
     const getData = async () => {
-      fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452&key=${process.env.REACT_APP_GOOGLE_API_KEY}`
-      );
+      let res = await fetch(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${geoData.longitude},${geoData.latitude}.json?access_token=${process.env.REACT_APP_MAP_ACCESS_TOKEN}`
+      ).then((res) => res.json());
+      let region = res.features.find((x) => x.place_type.includes("region"));
+      if (region) {
+        setLocaton((prev) => Object.assign({}, prev, { city: region.text }));
+      }
+      let country = res.features.find((x) => x.place_type.includes("country"));
+      if (country) {
+        setLocaton((prev) => Object.assign({}, prev, { country: country.text }));
+      }
     };
-    getData();
+
+    let timestamp = Date.now();
+
+    if (
+      timestamp - lastLocationFetchTimestamp.current >= timeGapBetweenLocationFetch &&
+      geoData.longitude !== 0 &&
+      geoData.latitude !== 0
+    ) {
+      getData();
+      lastLocationFetchTimestamp.current = timestamp;
+    }
   }, [geoData]);
 
   return (
@@ -237,6 +268,7 @@ const SensorsPanel = ({ graphView, sensorsOn, setSensorsOn, theme }) => {
           <Sensor
             active={sensorsOn}
             graphView={graphView}
+            characterValue={location}
             id="geodata"
             sendSensorData={SendSensorData}
             range={[-30, 30]}
@@ -260,6 +292,7 @@ const SensorsPanel = ({ graphView, sensorsOn, setSensorsOn, theme }) => {
               "heading",
               "speed",
             ]}
+            characterValueLabels={["country", "city"]}
           ></Sensor>
         </Col>
       </Row>

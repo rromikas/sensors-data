@@ -11,7 +11,6 @@ export const UnsubscribeGeolocation = (id) => {
 
 export const StartWatchingGeolocation = () => {
   function onLocationSuccess(position) {
-    console.log(position.coords);
     Object.values(subscribers).forEach((x) => x(position.coords));
   }
 

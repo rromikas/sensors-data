@@ -1,31 +1,17 @@
-const chartConfig = (range) => {
+const chartConfig = (range, keys, colors) => {
   return {
     type: "line",
     data: {
       labels: new Array(50).fill(""),
-      datasets: [
-        {
-          label: "x",
+      datasets: keys.map((x, i) => {
+        return {
+          label: x,
           data: new Array(50).fill(0),
-          borderColor: "deeppink",
+          borderColor: colors[i],
           borderWidth: 1,
           backgroundColor: "transparent",
-        },
-        {
-          label: "y",
-          data: new Array(50).fill(0),
-          borderColor: "deepskyblue",
-          borderWidth: 1,
-          backgroundColor: "transparent",
-        },
-        {
-          label: "z",
-          data: new Array(50).fill(0),
-          borderColor: "rebeccapurple",
-          borderWidth: 1,
-          backgroundColor: "transparent",
-        },
-      ],
+        };
+      }),
     },
     yAxisID: Date.now(),
     options: {
@@ -58,9 +44,9 @@ const chartConfig = (range) => {
 
 var charts = {};
 
-export const renderChart = (id, range) => {
+export const renderChart = (id, range, keys, colors) => {
   var ctx = document.getElementById(id).getContext("2d");
-  charts[id] = new window.Chart(ctx, chartConfig([range[0], range[1]]));
+  charts[id] = new window.Chart(ctx, chartConfig([range[0], range[1]], keys, colors));
 };
 
 export const updateData = (id, value) => {

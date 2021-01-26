@@ -6,8 +6,7 @@ import { getCookie } from "helpers";
 import { useHistory } from "react-router-dom";
 
 const Map = ReactMapboxGl({
-  accessToken:
-    "pk.eyJ1Ijoicm9taWthcyIsImEiOiJjazg0b2ZrOWcwc25mM29xdHFlMHdwenpsIn0.EpdSDBQASiP_K00nvaMMRA",
+  accessToken: process.env.REACT_APP_MAP_ACCESS_TOKEN,
 });
 
 const UserMarker = ({ color }) => {

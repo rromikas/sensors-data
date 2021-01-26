@@ -18,7 +18,7 @@ const Navbar = styled.div`
   display: flex;
   justify-content: space-between;
   height: 130px;
-  padding: 15px 30px;
+  padding: 20px;
   background: linear-gradient(0deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 74%);
 `;
 

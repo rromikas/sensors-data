@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { destroyChart, renderChart, updateData } from "./sandbox";
 
-function RealTimeChart({ value, range, sendSensorData, id, active }) {
+function RealTimeChart({ value, range, sendSensorData, id, active, keys, theme }) {
   const speed = 100;
   const timeoutRef = useRef(null);
   const realValue = useRef({ x: 0, y: 0, z: 0 });
@@ -26,7 +26,7 @@ function RealTimeChart({ value, range, sendSensorData, id, active }) {
   }, [value]);
 
   useEffect(() => {
-    renderChart(id, range);
+    renderChart(id, range, keys, theme.chartColors);
 
     return () => destroyChart(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps

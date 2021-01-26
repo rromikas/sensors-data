@@ -1,10 +1,18 @@
 let watchId;
+const subscribers = {};
 
-export const StartWatchingGeolocation = (setUserLocation) => {
-  function onLocationSuccess(position, setUserLocation) {
-    const latitude = position.coords.latitude;
-    const longitude = position.coords.longitude;
-    setUserLocation([longitude, latitude]);
+export const SubscribeGeolocation = (id, onValue) => {
+  subscribers[id] = onValue;
+};
+
+export const UnsubscribeGeolocation = (id) => {
+  delete subscribers[id];
+};
+
+export const StartWatchingGeolocation = () => {
+  function onLocationSuccess(position) {
+    console.log(position.coords);
+    Object.values(subscribers).forEach((x) => x(position.coords));
   }
 
   function onLocationError(er) {
@@ -14,7 +22,7 @@ export const StartWatchingGeolocation = (setUserLocation) => {
     alert("Browser doesn't support geolocation detector");
   } else {
     watchId = navigator.geolocation.watchPosition(
-      (position) => onLocationSuccess(position, setUserLocation),
+      (position) => onLocationSuccess(position),
       onLocationError,
       {
         enableHighAccuracy: true,

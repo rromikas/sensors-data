@@ -1,7 +1,7 @@
 import React from "react";
 import RealTimeChart from "./Chart";
 import Figure from "./Figure";
-import styled from "styled-components";
+import styled, { withTheme } from "styled-components";
 
 const Title = styled.div`
   font-weight: bold;
@@ -11,12 +11,24 @@ const Title = styled.div`
   margin-bottom: 10px;
 `;
 
+const colors = [
+  "deeppink",
+  "deepskyblue",
+  "rebeccapurple",
+  "chocolate",
+  "orange",
+  "seagreen",
+  "slateblue",
+  "lawngreen",
+];
+
 const markStyle = (color) => {
   return { width: 20, height: 7, borderRadius: 5, background: color, marginRight: 5 };
 };
 
 const Sensor = ({
   value,
+  characterValue,
   subject,
   units,
   range,
@@ -25,6 +37,8 @@ const Sensor = ({
   graphView,
   labels = ["X-axis", "Y-axis", "Z-axis"],
   active,
+  keys,
+  theme,
 }) => {
   return (
     <div
@@ -38,19 +52,16 @@ const Sensor = ({
     >
       <Title>{subject}</Title>
       {graphView && (
-        <div style={{ display: "flex", marginBottom: 10 }}>
-          <div style={{ display: "flex", alignItems: "center", marginRight: 5 }}>
-            <div style={markStyle("deeppink")}></div>
-            <div style={{ marginRight: 4, lineHeight: "14px" }}>x</div>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", marginRight: 5 }}>
-            <div style={markStyle("deepskyblue")}></div>
-            <div style={{ marginRight: 4, lineHeight: "14px" }}>y</div>
-          </div>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <div style={markStyle("rebeccapurple")}></div>
-            <div style={{ marginRight: 4, lineHeight: "14px" }}>z</div>
-          </div>
+        <div style={{ display: "flex", marginBottom: 15, marginTop: 25, flexWrap: "wrap" }}>
+          {keys.map((x, i) => (
+            <div
+              key={`${subject}-chart-label-${i}`}
+              style={{ display: "flex", alignItems: "center", marginRight: 5, marginBottom: 5 }}
+            >
+              <div style={markStyle(theme.chartColors[i])}></div>
+              <div style={{ marginRight: 4, lineHeight: "14px" }}>{x}</div>
+            </div>
+          ))}
         </div>
       )}
 
@@ -62,12 +73,15 @@ const Sensor = ({
           range={range}
           subject={subject}
           active={active}
+          keys={keys}
+          theme={theme}
         ></RealTimeChart>
       ) : (
-        <Figure value={value} labels={labels} units={units}></Figure>
+        <Figure value={value} labels={labels} units={units} subject={subject}></Figure>
       )}
+      {/* <Figure value={characterValue} labels={labels} units={units} subject={subject}></Figure> */}
     </div>
   );
 };
 
-export default Sensor;
+export default withTheme(Sensor);

@@ -94,6 +94,7 @@ const SensorsPanel = ({ graphView, sensorsOn, setSensorsOn, theme }) => {
 
   const TurnSensorsOn = useCallback(async () => {
     var ua = navigator.userAgent.toLowerCase();
+    let errorOccured = false;
     if (ua.indexOf("safari") !== -1) {
       if (ua.indexOf("chrome") > -1) {
         window.addEventListener("devicemotion", onDeviceMotionAssigned);
@@ -115,9 +116,11 @@ const SensorsPanel = ({ graphView, sensorsOn, setSensorsOn, theme }) => {
             .catch((er) => {
               return er.message;
             });
-          alert("repsonse adding device motion " + res);
+          if (res !== "success") {
+            errorOccured = true;
+          }
         } else {
-          alert("DeviceMotionEvent is not defined");
+          alert("DeviceMotion is not supported in this browser");
         }
         if (
           typeof DeviceOrientationEvent !== "undefined" &&
@@ -133,26 +136,30 @@ const SensorsPanel = ({ graphView, sensorsOn, setSensorsOn, theme }) => {
               }
             })
             .catch((er) => er.message);
-          alert("repsonse adding device orientation " + res);
+          if (res !== "success") {
+            errorOccured = true;
+          }
         } else {
-          alert("DeviceOrientationEvent is not defined");
+          alert("DeviceOrientationEvent is not supported in this browser");
         }
       }
     }
-    SubscribeGeolocation("geoData", (val) => {
-      setGeoData((prev) =>
-        Object.assign({}, prev, {
-          latitude: val.latitude || 0,
-          longitude: val.longitude || 0,
-          accuracy: val.accuracy || 0,
-          altitude: val.altitude || 0,
-          altitudeAccuracy: val.altitudeAccuracy || 0,
-          heading: val.heading || 0,
-          speed: val.speed || 0,
-        })
-      );
-    });
-    setSensorsOn(true);
+    if (!errorOccured) {
+      SubscribeGeolocation("geoData", (val) => {
+        setGeoData((prev) =>
+          Object.assign({}, prev, {
+            latitude: val.latitude || 0,
+            longitude: val.longitude || 0,
+            accuracy: val.accuracy || 0,
+            altitude: val.altitude || 0,
+            altitudeAccuracy: val.altitudeAccuracy || 0,
+            heading: val.heading || 0,
+            speed: val.speed || 0,
+          })
+        );
+      });
+      setSensorsOn(true);
+    }
   }, [onDeviceOrientationAssigned, onDeviceMotionAssigned]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -271,7 +278,6 @@ const SensorsPanel = ({ graphView, sensorsOn, setSensorsOn, theme }) => {
             characterValue={location}
             id="geodata"
             sendSensorData={SendSensorData}
-            range={[-30, 30]}
             subject="Geodata"
             value={geoData}
             keys={[

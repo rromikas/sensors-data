@@ -19,14 +19,21 @@ const chartConfig = (range, keys, colors) => {
       maintainAspectRatio: false,
       scales: {
         yAxes: [
-          {
-            display: true,
-            stacked: true,
-            ticks: {
-              min: range[0], // minimum value
-              max: range[1], // maximum value
+          Object.assign(
+            {},
+            {
+              display: true,
+              stacked: true,
             },
-          },
+            range
+              ? {
+                  ticks: {
+                    min: range[0], // minimum value
+                    max: range[1], // maximum value
+                  },
+                }
+              : {}
+          ),
         ],
       },
       tooltips: false,
@@ -46,17 +53,15 @@ var charts = {};
 
 export const renderChart = (id, range, keys, colors) => {
   var ctx = document.getElementById(id).getContext("2d");
-  charts[id] = new window.Chart(ctx, chartConfig([range[0], range[1]], keys, colors));
+  charts[id] = new window.Chart(ctx, chartConfig(range, keys, colors));
 };
 
 export const updateData = (id, value) => {
   if (id in charts) {
-    charts[id].data.datasets[0].data.shift();
-    charts[id].data.datasets[0].data.push(value.x);
-    charts[id].data.datasets[1].data.shift();
-    charts[id].data.datasets[1].data.push(value.y);
-    charts[id].data.datasets[2].data.shift();
-    charts[id].data.datasets[2].data.push(value.z);
+    Object.values(value).forEach((x, i) => {
+      charts[id].data.datasets[i].data.shift();
+      charts[id].data.datasets[i].data.push(x);
+    });
     charts[id].update({ duration: 0 });
   }
 };

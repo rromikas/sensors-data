@@ -108,7 +108,7 @@ const SensorsPanel = ({ graphView, sensorsOn, setSensorsOn, theme }) => {
             .then((response) => {
               if (response === "granted") {
                 window.addEventListener("devicemotion", onDeviceMotionAssigned);
-                return "sucess";
+                return "success";
               } else {
                 return "error";
               }
@@ -116,7 +116,6 @@ const SensorsPanel = ({ graphView, sensorsOn, setSensorsOn, theme }) => {
             .catch((er) => {
               return er.message;
             });
-          alert("Res1 " + res);
           if (res !== "success") {
             errorOccured = true;
           }
@@ -137,7 +136,6 @@ const SensorsPanel = ({ graphView, sensorsOn, setSensorsOn, theme }) => {
               }
             })
             .catch((er) => er.message);
-          alert("Res2 " + res);
           if (res !== "success") {
             errorOccured = true;
           }

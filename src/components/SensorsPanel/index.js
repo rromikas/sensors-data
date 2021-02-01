@@ -106,6 +106,7 @@ const SensorsPanel = ({ graphView, sensorsOn, setSensorsOn, theme }) => {
         ) {
           let res = await DeviceMotionEvent.requestPermission()
             .then((response) => {
+              alert("inner res" + response);
               if (response === "granted") {
                 window.addEventListener("devicemotion", onDeviceMotionAssigned);
                 return "success";
@@ -129,6 +130,7 @@ const SensorsPanel = ({ graphView, sensorsOn, setSensorsOn, theme }) => {
         ) {
           let res = await DeviceOrientationEvent.requestPermission()
             .then((response) => {
+              alert("inner res" + response);
               if (response === "granted") {
                 window.addEventListener("deviceorientation", onDeviceOrientationAssigned);
                 return "success";

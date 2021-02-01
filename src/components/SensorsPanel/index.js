@@ -116,6 +116,7 @@ const SensorsPanel = ({ graphView, sensorsOn, setSensorsOn, theme }) => {
             .catch((er) => {
               return er.message;
             });
+          alert(res);
           if (res !== "success") {
             errorOccured = true;
           }
@@ -136,6 +137,7 @@ const SensorsPanel = ({ graphView, sensorsOn, setSensorsOn, theme }) => {
               }
             })
             .catch((er) => er.message);
+          alert(res);
           if (res !== "success") {
             errorOccured = true;
           }

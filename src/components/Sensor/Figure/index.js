@@ -15,7 +15,7 @@ const Figure = ({ value, labels, units, theme, subject, characterValue }) => {
           <div key={`${subject}-figure-${i}`} style={{ display: "flex", alignItems: "center" }}>
             <Label>{labels[i]}:</Label>
             <div style={{ whiteSpace: "nowrap" }}>
-              {characterValue ? x : x.toFixed(1)}
+              {characterValue ? x : x.toFixed(10)}
               {units}
             </div>
           </div>

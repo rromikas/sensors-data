@@ -79,10 +79,19 @@ const RequestEmailForm = ({ setCookie }) => {
   return (
     <Flipped
       flipId="emailForm"
+      onAppear={(el) => {
+        el.style.opacity = 0;
+        spring({
+          onUpdate: (val) => {
+            el.style.transform = `translateX(${(1 - val) * 100}%)`;
+            el.style.opacity = val;
+          },
+        });
+      }}
       onExit={(el, index, removeElement) => {
         spring({
           onUpdate: (val) => {
-            el.style.opacity = 1 - val;
+            el.style.transform = `translateX(${val * 100}%)`;
           },
           onComplete: removeElement,
         });

@@ -275,6 +275,7 @@ const SensorsPanel = ({ graphView, sensorsOn, setSensorsOn, theme }) => {
           <Sensor
             active={sensorsOn}
             graphView={graphView}
+            graphViewDisabled
             characterValue={location}
             id="geodata"
             sendSensorData={SendSensorData}

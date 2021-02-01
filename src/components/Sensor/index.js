@@ -36,6 +36,7 @@ const Sensor = ({
   sendSensorData,
   id,
   graphView,
+  graphViewDisabled = false,
   labels = ["X-axis", "Y-axis", "Z-axis"],
   active,
   keys,
@@ -52,7 +53,7 @@ const Sensor = ({
       }}
     >
       <Title>{subject}</Title>
-      {graphView && (
+      {graphView && !graphViewDisabled && (
         <div style={{ display: "flex", marginBottom: 15, marginTop: 25, flexWrap: "wrap" }}>
           {keys.map((x, i) => (
             <div
@@ -66,7 +67,7 @@ const Sensor = ({
         </div>
       )}
 
-      {graphView ? (
+      {graphView && !graphViewDisabled ? (
         <RealTimeChart
           id={id}
           sendSensorData={sendSensorData}

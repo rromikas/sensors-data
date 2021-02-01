@@ -1,12 +1,16 @@
 import React, { useState, useEffect, useRef, Suspense } from "react";
 import Sensors from "components/SensorsPanel";
 import styled, { withTheme } from "styled-components";
-import { getCookie } from "helpers";
+import { getCookie, setCookie as setBrowserCookie } from "helpers";
 import GraphIcon from "images/Graph";
 import Cursor from "images/Cursor";
 import RequestEmailForm from "components/RequestEmailForm";
 import Loader from "components/Loader";
 import { Flipper } from "react-flip-toolkit";
+import LogoutIcon from "images/Logout";
+import ShareIcon from "images/Share";
+import { Clipboard } from "components/Clipboard";
+
 const Map = React.lazy(() => import("components/Map"));
 
 const Navbar = styled.div`
@@ -20,6 +24,7 @@ const Navbar = styled.div`
   height: 130px;
   padding: 1rem;
   background: linear-gradient(0deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 74%);
+  align-items: flex-start;
 `;
 
 const SwitchButton = styled.div`
@@ -53,21 +58,31 @@ const App = ({
     setPageRendered(true);
   }, []);
 
+  const clearCookie = () => {
+    setBrowserCookie("secure-sensors-cookie", "", -2);
+    setCookie("");
+  };
+
   return (
     <div>
       <Navbar>
-        <div
-          style={{
-            color: theme.main,
-            fontSize: 24,
-            lineHeight: "24px",
-            fontWeight: "bold",
-            textAlign: "center",
-          }}
-        >
-          <div>Welcome,</div>
-          <div>{cookie ? cookie.split("@")[0] : ""}</div>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <div
+            style={{
+              color: theme.main,
+              fontSize: 24,
+              lineHeight: "24px",
+              fontWeight: "bold",
+              textAlign: "center",
+              marginRight: 20,
+            }}
+          >
+            <div>Welcome,</div>
+            <div>{cookie ? cookie.split("@")[0] : ""}</div>
+          </div>
+          <LogoutIcon color={theme.main} onClick={clearCookie}></LogoutIcon>
         </div>
+
         <div>
           <SwitchButton active={graphView} onClick={() => setGraphView(!graphView)}>
             <GraphIcon color={graphView ? theme.secondary : theme.main}></GraphIcon>
@@ -80,6 +95,19 @@ const App = ({
             <Cursor color={watchLocation ? theme.secondary : theme.main}></Cursor>
           </SwitchButton>
           <div id="sensors-button"></div>
+          <Clipboard
+            urlToCopy={
+              process.env.PUBLIC_URL + "/" + userLocation.join("-") + "-" + cookie.split("@")[0]
+            }
+            onCopy={() => console.log("copied man")}
+          >
+            <SwitchButton
+              active={watchLocation}
+              onClick={watchLocation ? stopWatchingLocation : startWatchingLocation}
+            >
+              <ShareIcon color={watchLocation ? theme.secondary : theme.main}></ShareIcon>
+            </SwitchButton>
+          </Clipboard>
         </div>
       </Navbar>
       <Flipper flipKey={cookie}>

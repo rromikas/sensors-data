@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ThemeProvider } from "styled-components";
 import { BaseCSS } from "styled-bootstrap-grid";
-import { getCookie } from "helpers";
-import { useHistory } from "react-router-dom";
 import MainApp from "components/App";
 import {
   StartWatchingGeolocation,
@@ -30,14 +28,6 @@ const theme = {
 const App = () => {
   const [userLocation, setUserLocation] = useState([46.713001755456006, 24.819448316439964]);
   const [watchLocation, setWatchLocation] = useState(false);
-
-  const history = useHistory();
-
-  useEffect(() => {
-    if (getCookie("secure-sensors-cookie")) {
-      history.push("/app/" + Date.now());
-    }
-  }, [history]);
 
   return (
     <ThemeProvider theme={theme}>

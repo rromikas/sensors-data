@@ -2,37 +2,61 @@ import React, { useEffect } from "react";
 import ReactMapboxGl, { Marker } from "react-mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { withTheme } from "styled-components";
-import { getCookie } from "helpers";
-import { useHistory } from "react-router-dom";
 
 const Map = ReactMapboxGl({
   accessToken: process.env.REACT_APP_MAP_ACCESS_TOKEN,
 });
 
+const markerStyle = (color) => {
+  return {
+    pointerEvents: "none",
+    width: 30,
+    height: 30,
+    borderRadius: "50%",
+    border: "4px solid white",
+    background: color,
+    boxShadow: `0 0 0 1px ${color}`,
+  };
+};
+
 const UserMarker = ({ color }) => {
+  return <div style={markerStyle(color)}></div>;
+};
+
+const NotMyLocationMarker = ({ name, theme }) => {
   return (
-    <div
-      className="pulsating-circle"
-      style={{
-        pointerEvents: "none",
-        width: 30,
-        height: 30,
-        borderRadius: "50%",
-        border: "4px solid white",
-        background: color,
-        boxShadow: `0 0 0 1px ${color}`,
-      }}
-    ></div>
+    <div style={markerStyle("#2065ff")}>
+      <div
+        style={{
+          color: "#2065ff",
+          position: "absolute",
+          fontWeight: "bold",
+          top: -23,
+          left: 0,
+          right: 0,
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        {name}
+      </div>
+    </div>
   );
 };
 
-const Component = ({ onReady, theme, userLocation }) => {
-  const history = useHistory();
-  useEffect(() => {
-    if (!getCookie("secure-sensors-cookie")) {
-      history.push("/");
-    }
-  }, [history]);
+function isNumeric(str) {
+  if (typeof str != "string") return false;
+  return !isNaN(str) && !isNaN(parseFloat(str));
+}
+
+const isNotMyLocationValid = (location) => {
+  if (location.length === 2 && isNumeric(location[0]) && isNumeric(location[1])) {
+    return true;
+  }
+  return false;
+};
+
+const Component = ({ onReady, theme, userLocation, notMyLocation, notMyLocationName }) => {
   return (
     <Map
       onStyleLoad={onReady}
@@ -43,6 +67,12 @@ const Component = ({ onReady, theme, userLocation }) => {
         width: "100%",
       }}
     >
+      {isNotMyLocationValid(notMyLocation) && notMyLocationName && notMyLocationName.length < 30 && (
+        <Marker coordinates={notMyLocation.map((x) => +x)} style={{ pointerEvents: "none" }}>
+          <NotMyLocationMarker theme={theme} name={notMyLocationName}></NotMyLocationMarker>
+        </Marker>
+      )}
+
       <Marker coordinates={userLocation} style={{ pointerEvents: "none" }}>
         <UserMarker color={theme.danger}></UserMarker>
       </Marker>

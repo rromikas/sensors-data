@@ -52,6 +52,7 @@ const App = ({
   const [pageRendered, setPageRendered] = useState(false);
   const [cookie, setCookie] = useState(getCookie("secure-sensors-cookie"));
   const [sensorsOn, setSensorsOn] = useState(false);
+  const [shareUrlCopied, setShareUrlCopied] = useState(false);
 
   useEffect(() => {
     watchLocationButton.current.click();
@@ -62,6 +63,8 @@ const App = ({
     setBrowserCookie("secure-sensors-cookie", "", -2);
     setCookie("");
   };
+
+  const sharedUrlDetails = window.location.pathname.substring(1).split("-");
 
   return (
     <div>
@@ -78,9 +81,15 @@ const App = ({
             }}
           >
             <div>Welcome,</div>
-            <div>{cookie ? cookie.split("@")[0] : ""}</div>
+            <div style={{ opacity: !cookie ? 0 : 1 }}>
+              {cookie ? cookie.split("@")[0] : "empty"}
+            </div>
           </div>
-          <LogoutIcon color={theme.main} onClick={clearCookie}></LogoutIcon>
+          <LogoutIcon
+            color={theme.main}
+            onClick={clearCookie}
+            style={{ cursor: "pointer" }}
+          ></LogoutIcon>
         </div>
 
         <div>
@@ -97,15 +106,18 @@ const App = ({
           <div id="sensors-button"></div>
           <Clipboard
             urlToCopy={
-              process.env.PUBLIC_URL + "/" + userLocation.join("-") + "-" + cookie.split("@")[0]
+              window.location.origin +
+              "/" +
+              userLocation.join("-") +
+              "-" +
+              (cookie ? cookie.split("@")[0] : "")
             }
-            onCopy={() => console.log("copied man")}
           >
             <SwitchButton
-              active={watchLocation}
-              onClick={watchLocation ? stopWatchingLocation : startWatchingLocation}
+              active={shareUrlCopied}
+              onClick={() => setShareUrlCopied(!shareUrlCopied)}
             >
-              <ShareIcon color={watchLocation ? theme.secondary : theme.main}></ShareIcon>
+              <ShareIcon color={shareUrlCopied ? theme.secondary : theme.main}></ShareIcon>
             </SwitchButton>
           </Clipboard>
         </div>
@@ -116,7 +128,11 @@ const App = ({
       <div style={{ height: "70vh", maxHeight: 679 }}>
         {pageRendered && (
           <Suspense fallback={<Loader></Loader>}>
-            <Map userLocation={userLocation} />
+            <Map
+              userLocation={userLocation}
+              notMyLocation={sharedUrlDetails.length === 3 ? sharedUrlDetails.slice(0, 2) : []}
+              notMyLocationName={sharedUrlDetails.length === 3 ? sharedUrlDetails[2] : ""}
+            />
           </Suspense>
         )}
       </div>

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import ReactMapboxGl, { Marker } from "react-mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { withTheme } from "styled-components";
@@ -57,8 +57,10 @@ const isNotMyLocationValid = (location) => {
 };
 
 const Component = ({ onReady, theme, userLocation, notMyLocation, notMyLocationName }) => {
+  const [zoom, setZoom] = useState(11);
   return (
     <Map
+      onZoom={(x) => setZoom(x.getZoom())}
       onStyleLoad={onReady}
       style="mapbox://styles/mapbox/streets-v9"
       center={userLocation}
@@ -66,6 +68,7 @@ const Component = ({ onReady, theme, userLocation, notMyLocation, notMyLocationN
         height: "100%",
         width: "100%",
       }}
+      zoom={[zoom]}
     >
       {isNotMyLocationValid(notMyLocation) && notMyLocationName && notMyLocationName.length < 30 && (
         <Marker coordinates={notMyLocation.map((x) => +x)} style={{ pointerEvents: "none" }}>

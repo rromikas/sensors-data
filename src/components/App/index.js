@@ -6,10 +6,10 @@ import GraphIcon from "images/Graph";
 import Cursor from "images/Cursor";
 import RequestEmailForm from "components/RequestEmailForm";
 import Loader from "components/Loader";
-import { Flipper } from "react-flip-toolkit";
 import LogoutIcon from "images/Logout";
-import ShareIcon from "images/Share";
 import { Clipboard } from "components/Clipboard";
+import { Flipper } from "react-flip-toolkit";
+import { useHistory } from "react-router-dom";
 
 const Map = React.lazy(() => import("components/Map"));
 
@@ -52,16 +52,18 @@ const App = ({
   const [pageRendered, setPageRendered] = useState(false);
   const [cookie, setCookie] = useState(getCookie("secure-sensors-cookie"));
   const [sensorsOn, setSensorsOn] = useState(false);
-  const [shareUrlCopied, setShareUrlCopied] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
     watchLocationButton.current.click();
     setPageRendered(true);
   }, []);
 
-  const clearCookie = () => {
+  const logout = () => {
     setBrowserCookie("secure-sensors-cookie", "", -2);
     setCookie("");
+    setGraphView(false);
+    history.push("/");
   };
 
   const sharedUrlDetails = window.location.pathname.substring(1).split("-");
@@ -87,7 +89,7 @@ const App = ({
           </div>
           <LogoutIcon
             color={theme.main}
-            onClick={clearCookie}
+            onClick={logout}
             style={{ cursor: "pointer" }}
           ></LogoutIcon>
         </div>
@@ -105,6 +107,7 @@ const App = ({
           </SwitchButton>
           <div id="sensors-button"></div>
           <Clipboard
+            theme={theme}
             urlToCopy={
               window.location.origin +
               "/" +
@@ -112,14 +115,7 @@ const App = ({
               "-" +
               (cookie ? cookie.split("@")[0] : "")
             }
-          >
-            <SwitchButton
-              active={shareUrlCopied}
-              onClick={() => setShareUrlCopied(!shareUrlCopied)}
-            >
-              <ShareIcon color={shareUrlCopied ? theme.secondary : theme.main}></ShareIcon>
-            </SwitchButton>
-          </Clipboard>
+          ></Clipboard>
         </div>
       </Navbar>
       <Flipper flipKey={cookie}>

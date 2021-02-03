@@ -11,17 +11,6 @@ const Title = styled.div`
   margin-bottom: 10px;
 `;
 
-const colors = [
-  "deeppink",
-  "deepskyblue",
-  "rebeccapurple",
-  "chocolate",
-  "orange",
-  "seagreen",
-  "slateblue",
-  "lawngreen",
-];
-
 const markStyle = (color) => {
   return { width: 20, height: 7, borderRadius: 5, background: color, marginRight: 5 };
 };

@@ -37,7 +37,7 @@ const SensorsButton = ({
       TurnOnOffButtonRef.current.click();
       setSensorsButtonRenderedOnce(true);
     }
-  }, []);
+  }, [sensorsButtonRenderedOnce, setSensorsButtonRenderedOnce]);
   return (
     <SwitchButton
       theme={theme}
@@ -51,6 +51,8 @@ const SensorsButton = ({
     </SwitchButton>
   );
 };
+
+const timeGapBetweenLocationFetch = 20 * 1000; // miliseconds
 
 const SensorsPanel = ({ graphView, sensorsOn, setSensorsOn, theme }) => {
   const [orientation, setOrientation] = useState({ alpha: 0, beta: 0, gamma: 0 });
@@ -72,25 +74,18 @@ const SensorsPanel = ({ graphView, sensorsOn, setSensorsOn, theme }) => {
   });
 
   const lastLocationFetchTimestamp = useRef(0);
-  const timeGapBetweenLocationFetch = 20 * 1000; // miliseconds
 
   const [location, setLocaton] = useState({ country: "", city: "" });
 
   const [sensorsButtonRenderedOnce, setSensorsButtonRenderedOnce] = useState(false);
 
-  const onDeviceMotionAssigned = useCallback(
-    (e) => {
-      onDeviceMotion(e, { setAcceleration, setAccelerationIncludingGravity, setRotationRate });
-    },
-    [onDeviceMotion]
-  );
+  const onDeviceMotionAssigned = useCallback((e) => {
+    onDeviceMotion(e, { setAcceleration, setAccelerationIncludingGravity, setRotationRate });
+  }, []);
 
-  const onDeviceOrientationAssigned = useCallback(
-    (e) => {
-      onDeviceOrientation(e, { setOrientation });
-    },
-    [onDeviceOrientation]
-  );
+  const onDeviceOrientationAssigned = useCallback((e) => {
+    onDeviceOrientation(e, { setOrientation });
+  }, []);
 
   const TurnSensorsOn = useCallback(async () => {
     var ua = navigator.userAgent.toLowerCase();
@@ -116,7 +111,6 @@ const SensorsPanel = ({ graphView, sensorsOn, setSensorsOn, theme }) => {
             .catch((er) => {
               return er.message;
             });
-          alert(res);
           if (res !== "success") {
             errorOccured = true;
           }
@@ -161,7 +155,7 @@ const SensorsPanel = ({ graphView, sensorsOn, setSensorsOn, theme }) => {
       });
       setSensorsOn(true);
     }
-  }, [onDeviceOrientationAssigned, onDeviceMotionAssigned]);
+  }, [onDeviceOrientationAssigned, onDeviceMotionAssigned, setSensorsOn]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
 
@@ -170,7 +164,7 @@ const SensorsPanel = ({ graphView, sensorsOn, setSensorsOn, theme }) => {
     window.removeEventListener("devicemotion", onDeviceMotionAssigned);
     UnsubscribeGeolocation("geoData");
     setSensorsOn(false);
-  }, [onDeviceOrientation, onDeviceMotion]);
+  }, [onDeviceOrientationAssigned, onDeviceMotionAssigned, setSensorsOn]);
 
   useEffect(() => {
     ReactDOM.render(

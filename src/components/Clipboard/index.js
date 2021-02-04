@@ -9,19 +9,24 @@ const Button = styled.div`
   width: 48px;
   border-radius: 5px;
   transition: background 0.2s;
+  background: ${(props) => (!props.copied ? "white" : props.theme.main)};
   border: 1px solid ${(props) => props.theme.main};
-  background: ${(props) => (props.copied ? "white" : props.theme.main)};
-  display: flex;
-  align-items: center;
-  font-size: 12px;
-  line-height: 13px;
-  text-align: center;
-  font-weight: 600;
-  justify-content: center;
   cursor: pointer;
   margin-bottom: 5px;
   overflow: hidden;
+`;
+
+const ButtonInnerContainer = styled.div`
+  text-align: center;
+  font-size: 12px;
+  line-height: 13px;
+  font-weight: 600;
   position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const onExit = (el, index, removeElement) => {
@@ -41,7 +46,7 @@ const onAppear = (el) => {
     },
   });
 };
-export function Clipboard({ urlToCopy, theme }) {
+export function Clipboard({ urlToCopy, onCopy = () => {}, theme }) {
   const [copied, setCopied] = useState(false);
   const ref = useRef(null);
 
@@ -76,18 +81,36 @@ export function Clipboard({ urlToCopy, theme }) {
             }, 1000);
           }}
         >
-          {copied && (
-            <Flipped flipId={`clipboard-confirm-${Date.now()}`} onAppear={onAppear} onExit={onExit}>
-              <div>Link Copied!</div>
-            </Flipped>
-          )}
-          {!copied && (
-            <Flipped flipId={`clipboard-btn-${Date.now()}`} onAppear={onAppear} onExit={onExit}>
-              <div style={{ display: "flex", height: "100%" }}>
-                <ShareIcon color={theme.secondary}></ShareIcon>
-              </div>
-            </Flipped>
-          )}
+          <ButtonInnerContainer>
+            {copied && (
+              <Flipped
+                flipId={`clipboard-confirm-${Date.now()}`}
+                onAppear={onAppear}
+                onExit={onExit}
+              >
+                <div
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderRadius: 5,
+                    color: theme.secondary,
+                  }}
+                >
+                  Link Copied!
+                </div>
+              </Flipped>
+            )}
+            {!copied && (
+              <Flipped flipId={`clipboard-btn-${Date.now()}`} onAppear={onAppear} onExit={onExit}>
+                <div style={{ display: "flex" }}>
+                  <ShareIcon color={theme.main}></ShareIcon>
+                </div>
+              </Flipped>
+            )}
+          </ButtonInnerContainer>
         </Button>
       </Flipper>
     </div>

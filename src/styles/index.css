@@ -115,4 +115,16 @@ button {
 ::-webkit-input-placeholder {
   text-align: center;
 }
+
+.mapboxgl-ctrl-attrib.mapboxgl-compact:after {
+  background-color: white !important;
+}
+
+.mapboxgl-ctrl-attrib-button {
+  display: none !important;
+}
+
+.mapboxgl-ctrl-attrib.mapboxgl-compact {
+  min-height: 24px !important;
+}
 /*# sourceMappingURL=index.css.map */
